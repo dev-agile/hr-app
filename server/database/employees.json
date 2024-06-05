@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "role": "Software Engineer",
+    "salary": 80034,
+    "qualification": "B.Sc. Computer Science",
+    "photo": "uploads/john_doe.jpg",
+    "qualificationPhoto": "uploads/john_doe_qualification.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "role": "Product Manager",
+    "salary": 90000,
+    "qualification": "MBA",
+    "photo": "uploads/jane_smith.jpg",
+    "qualificationPhoto": "uploads/jane_smith_qualification.jpg"
+  },
+  {
+    "name": "jbd",
+    "role": "dbjhv",
+    "salary": 763768,
+    "qualification": "dfjbf",
+    "photo": "jbjhvbbfij",
+    "qualificationPhoto": "dnnbbf",
+    "id": 3
+  }
+]
