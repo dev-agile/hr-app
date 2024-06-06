@@ -68,6 +68,7 @@ export const addEmployee = async (req, res) => {
 
 // Controller function to update an existing employee
 export const updateEmployee = async (req, res) => {
+  console.log(req.body);
   try {
     const id = parseInt(req.params.id);
     const updatedEmployee = req.body;

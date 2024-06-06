@@ -1,18 +1,33 @@
-import * as React from "react";
-import { List, Datagrid, TextField, ImageField,ListProps } from 'react-admin';
+import * as React from 'react';
+import {
+  List,
+  Datagrid,
+  TextField,
+  ImageField,
+  ListProps,
+} from 'react-admin';
+import { useNavigate } from 'react-router-dom';
 
-const CustomEmployeeList:React.FC<ListProps> = (props) => (
+const CustomList: React.FC<ListProps> = (props) => {
+  const navigate = useNavigate();
+
+  const handleRowClick = (id: number|string):void => {
+    navigate(`/employees/${id}`);
+  };
+
+  return (
     <List {...props}>
-        <Datagrid>
-            <TextField source="id" />
-            <TextField source="name" />
-            <TextField source="role" />
-            <TextField source="salary" />
-            <TextField source="qualification" />
-            <ImageField source="photo" title="Employee Photo" />
-            <ImageField source="qualificationPhoto" title="Qualification Photo" />
-        </Datagrid>
+      <Datagrid rowClick={(id):void => handleRowClick(id)}>
+        <TextField source="id" />
+        <TextField source="name" />
+        <TextField source="role" />
+        <TextField source="salary" />
+        <TextField source="qualification" />
+        <ImageField source="photo" title="name" />
+        <ImageField source="qualificationPhoto" title="qualification" />
+      </Datagrid>
     </List>
-);
+  );
+};
 
-export default CustomEmployeeList;
+export default CustomList;

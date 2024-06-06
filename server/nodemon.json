@@ -1,6 +1,6 @@
 {
     "watch": ["server.js"],
-    "ext": "js,json",
+    "ext": "*.js,*.json",
     "ignore": ["node_modules/**"],
     "exec": "node --experimental-modules server.js"
   }

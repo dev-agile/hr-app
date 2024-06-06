@@ -3,27 +3,36 @@
     "id": 1,
     "name": "John Doe",
     "role": "Software Engineer",
-    "salary": 80034,
+    "salary": "800",
     "qualification": "B.Sc. Computer Science",
-    "photo": "uploads/john_doe.jpg",
+    "photo": {},
     "qualificationPhoto": "uploads/john_doe_qualification.jpg"
   },
   {
     "id": 2,
-    "name": "Jane Smith",
+    "name": "Jane S",
     "role": "Product Manager",
     "salary": 90000,
-    "qualification": "MBA",
-    "photo": "uploads/jane_smith.jpg",
+    "qualification": "M234",
+    "photo": {},
     "qualificationPhoto": "uploads/jane_smith_qualification.jpg"
   },
   {
     "name": "jbd",
     "role": "dbjhv",
     "salary": 763768,
-    "qualification": "dfjbf",
-    "photo": "jbjhvbbfij",
+    "qualification": "dfjb",
+    "photo": {},
     "qualificationPhoto": "dnnbbf",
     "id": 3
+  },
+  {
+    "name": "wd",
+    "role": "we",
+    "salary": 23434,
+    "qualification": "34",
+    "photo": "34",
+    "qualificationPhoto": "34",
+    "id": 4
   }
 ]
