@@ -21,11 +21,11 @@
 */
 
 // Chakra imports
-import { Box, SimpleGrid } from "@chakra-ui/react";
-import DevelopmentTable from "views/admin/dataTables/components/DevelopmentTable";
-import CheckTable from "views/admin/dataTables/components/CheckTable";
-import ColumnsTable from "views/admin/dataTables/components/ColumnsTable";
-import ComplexTable from "views/admin/dataTables/components/ComplexTable";
+import { Box, SimpleGrid,Grid } from "@chakra-ui/react";
+import AttendanceStatus from "./components/AttendanceStatus";
+import AttendanceGrid from "./components/AttendanceGrid";
+import YearlyAttendanceReport from "./components/YearlyAttendanceReport";
+
 import {
   columnsDataDevelopment,
   columnsDataCheck,
@@ -39,27 +39,20 @@ import tableDataComplex from "views/admin/dataTables/variables/tableDataComplex.
 import React from "react";
 
 export default function Settings() {
-  // Chakra Color Mode
+
   return (
+    
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
-      <SimpleGrid
-        mb='20px'
-        columns={{ sm: 1, md: 2 }}
-        spacing={{ base: "20px", xl: "20px" }}>
-        <DevelopmentTable
-          columnsData={columnsDataDevelopment}
-          tableData={tableDataDevelopment}
-        />
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <ColumnsTable
-          columnsData={columnsDataColumns}
-          tableData={tableDataColumns}
-        />
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
-        />
-      </SimpleGrid>
-    </Box>
+      <Box p="6">
+    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      <AttendanceStatus />
+      <YearlyAttendanceReport />
+    </Grid>
+    {/* <Box mt="6">
+      <AttendanceGrid />
+    </Box> */}
+  </Box>
+  </Box>
+  
   );
 }

@@ -58,7 +58,7 @@ function TopCreatorTable(props) {
           mb='10px'
           boxShadow='0px 40px 58px -20px rgba(112, 144, 176, 0.26)'>
           <Text color={textColor} fontSize='xl' fontWeight='600'>
-            Top Creators
+            Users
           </Text>
           <Button variant='action'>See all</Button>
         </Flex>

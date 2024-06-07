@@ -25,6 +25,7 @@ import Menu from "components/menu/MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
+
 export default function ColumnsTable(props) {
   const { columnsData, tableData } = props;
 
@@ -53,6 +54,7 @@ export default function ColumnsTable(props) {
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+
   return (
     <Card
       direction='column'
@@ -65,7 +67,7 @@ export default function ColumnsTable(props) {
           fontSize='22px'
           fontWeight='700'
           lineHeight='100%'>
-          Complex Table
+          Employee Attendance Table
         </Text>
         <Menu />
       </Flex>
@@ -111,24 +113,8 @@ export default function ColumnsTable(props) {
                           w='24px'
                           h='24px'
                           me='5px'
-                          color={
-                            cell.value === "Approved"
-                              ? "green.500"
-                              : cell.value === "Disable"
-                              ? "red.500"
-                              : cell.value === "Error"
-                              ? "orange.500"
-                              : null
-                          }
-                          as={
-                            cell.value === "Approved"
-                              ? MdCheckCircle
-                              : cell.value === "Disable"
-                              ? MdCancel
-                              : cell.value === "Error"
-                              ? MdOutlineError
-                              : null
-                          }
+                          color={cell.value === "Working" ? "green.500" : "red.500"}
+                          as={MdCheckCircle}
                         />
                         <Text color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
@@ -151,6 +137,13 @@ export default function ColumnsTable(props) {
                           w='108px'
                           value={cell.value}
                         />
+                        <Text
+                          color={textColor}
+                          fontSize='sm'
+                          fontWeight='700'
+                          ml='8px'>
+                          {cell.value}%
+                        </Text>
                       </Flex>
                     );
                   }

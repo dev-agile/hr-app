@@ -103,7 +103,6 @@ export const barChartOptionsDailyTraffic = {
   },
 };
 
-// Consumption Users Reports
 
 export const barChartDataConsumption = [
   {
