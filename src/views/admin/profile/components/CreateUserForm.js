@@ -12,15 +12,17 @@ import {
   Switch,
   useToast,
   FormErrorMessage,
-  FormHelperText,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ReactSelect from "react-select";
+import CreatableSelect from "react-select/creatable";
 import { AppContext } from "AppContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { css } from "@emotion/react";
+import { Icon } from "@chakra-ui/react";
+import { FiUpload } from "react-icons/fi";
 
 const validationSchema = Yup.object({
   id: Yup.string().required("ID is required"),
@@ -30,7 +32,7 @@ const validationSchema = Yup.object({
     .required("Email is required"),
   password: Yup.string().required("Password is required"),
   dob: Yup.date().required("Date of Birth is required"),
-  techStack: Yup.string().required("Tech Stack is required"),
+  techStack: Yup.array().of(Yup.string()).required("Tech Stack is required"),
   joiningDate: Yup.date().required("Joining Date is required"),
   endingDate: Yup.date(),
   pan: Yup.mixed().required("PAN is required"),
@@ -102,7 +104,7 @@ const CreateUserForm = () => {
         email: "",
         password: "",
         dob: "",
-        techStack: "",
+        techStack: [],
         joiningDate: "",
         endingDate: "",
         pan: null,
@@ -110,7 +112,7 @@ const CreateUserForm = () => {
         group: [],
         role: "",
         avatar: null,
-        currentlyWorking: true,
+        currentlyWorking: true, 
       }}
       validationSchema={validationSchema}
       onSubmit={(values, actions) => {
@@ -126,9 +128,9 @@ const CreateUserForm = () => {
         actions.resetForm();
       }}
     >
-      {({ setFieldValue, errors, touched }) => (
+      {({ setFieldValue, values, errors, touched }) => (
         <Form>
-          <Box p="8" borderWidth="1px" borderRadius="lg" bg="white">
+          <Box p="8"mt={20} borderWidth="1px" borderRadius="lg" bg="white">
             <VStack spacing="6" align="start">
               <Grid templateColumns="repeat(2, 1fr)" gap="6" w="100%">
                 <GridItem>
@@ -210,12 +212,20 @@ const CreateUserForm = () => {
                     isInvalid={!!errors.techStack && touched.techStack}
                   >
                     <FormLabel htmlFor="techStack">Tech Stack</FormLabel>
-                    <Field
-                      as={Input}
+                    <CreatableSelect
+                      isMulti
                       id="techStack"
                       name="techStack"
-                      placeholder="Tech Stack"
-                      bg="white"
+                      placeholder="Select or type tech stack"
+                      styles={customStyles}
+                      onChange={(selectedOptions) =>
+                        setFieldValue(
+                          "techStack",
+                          selectedOptions
+                            ? selectedOptions.map((option) => option.value)
+                            : []
+                        )
+                      }
                     />
                     <FormErrorMessage>{errors.techStack}</FormErrorMessage>
                   </FormControl>
@@ -256,7 +266,7 @@ const CreateUserForm = () => {
                           placeholderText="Select Ending Date"
                           dateFormat="yyyy-MM-dd"
                           className="chakra-input css-1c6u5d2"
-                          disabled={field.value ? false : true}
+                          disabled={values.currentlyWorking} 
                         />
                       )}
                     </Field>
@@ -294,8 +304,9 @@ const CreateUserForm = () => {
                       bg="white"
                       onChange={(e) => setFieldValue("role", e.target.value)}
                     >
-                      <option value="admin">Admin</option>
-                      <option value="user">User</option>
+                      <option value="Frontend">Front End Devloper</option>
+                      <option value="Backend">Back End Devloper</option>
+                      <option value="Tester">Tester</option>
                     </Select>
                     <FormErrorMessage>{errors.role}</FormErrorMessage>
                   </FormControl>
@@ -308,6 +319,7 @@ const CreateUserForm = () => {
                       onClick={() => document.getElementById("pan").click()}
                     >
                       Upload PAN
+                      <Icon as={FiUpload} m={2} />
                     </Button>
                     <input
                       id="pan"
@@ -326,9 +338,12 @@ const CreateUserForm = () => {
                     <FormLabel htmlFor="aadhaar">Aadhaar</FormLabel>
                     <Button
                       colorScheme="purple"
-                      onClick={() => document.getElementById("aadhaar").click()}
+                      onClick={() =>
+                        document.getElementById("aadhaar").click()
+                      }
                     >
                       Upload Aadhaar
+                      <Icon as={FiUpload} m={2} />
                     </Button>
                     <input
                       id="aadhaar"
@@ -344,12 +359,13 @@ const CreateUserForm = () => {
                 </GridItem>
               </Grid>
               <FormControl>
-                <FormLabel htmlFor="avatar">Avatar</FormLabel>
+                <FormLabel htmlFor="avatar">Profile Pic</FormLabel>
                 <Button
                   colorScheme="purple"
                   onClick={() => document.getElementById("avatar").click()}
                 >
-                  Upload
+                  Upload Recent Photo
+                  <Icon as={FiUpload} m={2} />
                 </Button>
                 <input
                   id="avatar"
@@ -369,16 +385,16 @@ const CreateUserForm = () => {
                   as={Switch}
                   id="currentlyWorking"
                   name="currentlyWorking"
+                  isChecked={values.currentlyWorking}
                   onChange={(e) => {
                     setFieldValue("currentlyWorking", e.target.checked);
-                    if (!e.target.checked)
+                    if (e.target.checked) {
+                      setFieldValue("endingDate", ""); 
+                    } else {
                       setFieldValue("endingDate", new Date());
-                    else setFieldValue("endingDate", null);
+                    }
                   }}
                 />
-                <FormHelperText>
-                  Check if currently working, otherwise select ending date.
-                </FormHelperText>
               </FormControl>
               <Box alignSelf="end">
                 <Button type="submit" colorScheme="purple">

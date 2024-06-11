@@ -18,6 +18,7 @@ import RTL from "views/admin/rtl";
 
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
+import CreateUserForm from "views/admin/profile/components/CreateUserForm";
 
 const routes = [
   {
@@ -54,7 +55,7 @@ const routes = [
     layout: "/admin",
     path: "/profile",
     icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-    component: Profile,
+    component: CreateUserForm,
   },
   {
     name: "Sign In",
