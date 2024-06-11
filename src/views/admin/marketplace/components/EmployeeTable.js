@@ -1,5 +1,5 @@
-// EmployeeTable.js
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Table,
   Thead,
@@ -43,6 +43,9 @@ const employeeData = [
     group: ["group1"],
     currentlyWorking: true,
     avatar: "https://bit.ly/ryan-florence",
+    fathersName: "John Smith",
+    mothersName: "Jane Smith",
+    address: "123 Main St, Anytown, USA",
   },
   {
     id: "2",
@@ -58,6 +61,9 @@ const employeeData = [
     group: ["group2"],
     currentlyWorking: true,
     avatar: "https://bit.ly/sage-adebayo",
+    fathersName: "Michael William",
+    mothersName: "Anna William",
+    address: "456 Elm St, Anytown, USA",
   },
   {
     id: "3",
@@ -73,11 +79,15 @@ const employeeData = [
     group: ["group1", "group2"],
     currentlyWorking: false,
     avatar: "https://bit.ly/dan-abramov",
+    fathersName: "Robert John",
+    mothersName: "Emily John",
+    address: "789 Oak St, Anytown, USA",
   },
 ];
 
 const EmployeeTable = ({ searchQuery }) => {
   const [expandedRows, setExpandedRows] = useState([]);
+  const history = useHistory();
 
   const handleToggle = (id) => {
     if (expandedRows.includes(id)) {
@@ -87,9 +97,16 @@ const EmployeeTable = ({ searchQuery }) => {
     }
   };
 
+  const handleEdit = (employee) => {
+    history.push({
+      pathname: "/admin/profile",
+      state: { employee },
+    });
+  };
+
   const filteredData = employeeData.filter((employee) =>
-  employee.name.toLowerCase().includes(searchQuery.toLowerCase())
-);
+    employee.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const bgColor = useColorModeValue("gray.50", "gray.700");
   const cardBgColor = useColorModeValue("white", "gray.800");
@@ -133,6 +150,7 @@ const EmployeeTable = ({ searchQuery }) => {
                     size="sm"
                     colorScheme="teal"
                     icon={<EditIcon />}
+                    onClick={() => handleEdit(employee)}
                   />
                   <IconButton
                     size="sm"
@@ -212,6 +230,21 @@ const EmployeeTable = ({ searchQuery }) => {
                         <Text>
                           <strong>Currently Working:</strong>{" "}
                           {employee.currentlyWorking ? "Yes" : "No"}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text>
+                          <strong>Father's Name:</strong> {employee.fathersName}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text>
+                          <strong>Mother's Name:</strong> {employee.mothersName}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text>
+                          <strong>Address:</strong> {employee.address}
                         </Text>
                       </Box>
                     </VStack>

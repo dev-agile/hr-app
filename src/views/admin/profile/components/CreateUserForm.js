@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Button,
@@ -17,7 +18,6 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ReactSelect from "react-select";
 import CreatableSelect from "react-select/creatable";
-import { AppContext } from "AppContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { css } from "@emotion/react";
@@ -39,6 +39,9 @@ const validationSchema = Yup.object({
   aadhaar: Yup.mixed().required("Aadhaar is required"),
   group: Yup.array().of(Yup.string()).required("Group is required"),
   role: Yup.string().required("Role is required"),
+  fathersName: Yup.string().required("Father's Name is required"),
+  mothersName: Yup.string().required("Mother's Name is required"),
+  address: Yup.string().required("Address is required"),
 });
 
 const options = [
@@ -94,33 +97,37 @@ const customDatePickerStyles = css`
 
 const CreateUserForm = () => {
   const toast = useToast();
-  const { setFormData } = useContext(AppContext);
+  const location = useLocation();
+  const { employee } = location.state || {};
+  const initialValues = employee || {
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+    dob: "",
+    techStack: [],
+    joiningDate: "",
+    endingDate: "",
+    pan: null,
+    aadhaar: null,
+    group: [],
+    role: "",
+    avatar: null,
+    currentlyWorking: true,
+    fathersName: "",
+    mothersName: "",
+    address: "",
+  };
 
   return (
     <Formik
-      initialValues={{
-        id: "",
-        name: "",
-        email: "",
-        password: "",
-        dob: "",
-        techStack: [],
-        joiningDate: "",
-        endingDate: "",
-        pan: null,
-        aadhaar: null,
-        group: [],
-        role: "",
-        avatar: null,
-        currentlyWorking: true, 
-      }}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, actions) => {
         console.log(values);
-        setFormData(values);
         toast({
-          title: "User created.",
-          description: "The new user has been created successfully.",
+          title: "User updated.",
+          description: "The user details have been updated successfully.",
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -130,7 +137,7 @@ const CreateUserForm = () => {
     >
       {({ setFieldValue, values, errors, touched }) => (
         <Form>
-          <Box p="8"mt={20} borderWidth="1px" borderRadius="lg" bg="white">
+          <Box p="8" mt={20} borderWidth="1px" borderRadius="lg" bg="white">
             <VStack spacing="6" align="start">
               <Grid templateColumns="repeat(2, 1fr)" gap="6" w="100%">
                 <GridItem>
@@ -142,6 +149,7 @@ const CreateUserForm = () => {
                       name="id"
                       placeholder="ID"
                       bg="white"
+                      isDisabled
                     />
                     <FormErrorMessage>{errors.id}</FormErrorMessage>
                   </FormControl>
@@ -226,6 +234,10 @@ const CreateUserForm = () => {
                             : []
                         )
                       }
+                      value={values.techStack.map((tech) => ({
+                        value: tech,
+                        label: tech,
+                      }))}
                     />
                     <FormErrorMessage>{errors.techStack}</FormErrorMessage>
                   </FormControl>
@@ -266,7 +278,7 @@ const CreateUserForm = () => {
                           placeholderText="Select Ending Date"
                           dateFormat="yyyy-MM-dd"
                           className="chakra-input css-1c6u5d2"
-                          disabled={values.currentlyWorking} 
+                          disabled={values.currentlyWorking}
                         />
                       )}
                     </Field>
@@ -290,6 +302,10 @@ const CreateUserForm = () => {
                             : []
                         )
                       }
+                      value={values.group.map((group) => ({
+                        value: group,
+                        label: group,
+                      }))}
                     />
                     <FormErrorMessage>{errors.group}</FormErrorMessage>
                   </FormControl>
@@ -303,12 +319,56 @@ const CreateUserForm = () => {
                       placeholder="Choose Role"
                       bg="white"
                       onChange={(e) => setFieldValue("role", e.target.value)}
+                      value={values.role}
                     >
-                      <option value="Frontend">Front End Devloper</option>
-                      <option value="Backend">Back End Devloper</option>
+                      <option value="Frontend">Front End Developer</option>
+                      <option value="Backend">Back End Developer</option>
                       <option value="Tester">Tester</option>
                     </Select>
                     <FormErrorMessage>{errors.role}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl
+                    isInvalid={!!errors.fathersName && touched.fathersName}
+                  >
+                    <FormLabel htmlFor="fathersName">Father's Name</FormLabel>
+                    <Field
+                      as={Input}
+                      id="fathersName"
+                      name="fathersName"
+                      placeholder="Father's Name"
+                      bg="white"
+                    />
+                    <FormErrorMessage>{errors.fathersName}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl
+                    isInvalid={!!errors.mothersName && touched.mothersName}
+                  >
+                    <FormLabel htmlFor="mothersName">Mother's Name</FormLabel>
+                    <Field
+                      as={Input}
+                      id="mothersName"
+                      name="mothersName"
+                      placeholder="Mother's Name"
+                      bg="white"
+                    />
+                    <FormErrorMessage>{errors.mothersName}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl isInvalid={!!errors.address && touched.address}>
+                    <FormLabel htmlFor="address">Address</FormLabel>
+                    <Field
+                      as={Input}
+                      id="address"
+                      name="address"
+                      placeholder="Address"
+                      bg="white"
+                    />
+                    <FormErrorMessage>{errors.address}</FormErrorMessage>
                   </FormControl>
                 </GridItem>
                 <GridItem>
@@ -357,6 +417,7 @@ const CreateUserForm = () => {
                     <FormErrorMessage>{errors.aadhaar}</FormErrorMessage>
                   </FormControl>
                 </GridItem>
+             
               </Grid>
               <FormControl>
                 <FormLabel htmlFor="avatar">Profile Pic</FormLabel>
@@ -389,7 +450,7 @@ const CreateUserForm = () => {
                   onChange={(e) => {
                     setFieldValue("currentlyWorking", e.target.checked);
                     if (e.target.checked) {
-                      setFieldValue("endingDate", ""); 
+                      setFieldValue("endingDate", "");
                     } else {
                       setFieldValue("endingDate", new Date());
                     }

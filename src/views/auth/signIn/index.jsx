@@ -202,7 +202,7 @@ function SignIn() {
               w="100%"
               h="50"
               mb="24px"
-              onClick={handleSignIn} // Use handleSignIn for navigation
+              onClick={handleSignIn} 
             >
               Sign In
             </Button>
