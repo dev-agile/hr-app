@@ -17,6 +17,19 @@ import {
   HStack,
   Text,
   Avatar,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import {
   ViewIcon,
@@ -27,6 +40,7 @@ import {
   PhoneIcon,
   CalendarIcon,
 } from "@chakra-ui/icons";
+import { MyCalendar } from "views/admin/default/components/MyCalendar";
 
 const employeeData = [
   {
@@ -85,8 +99,32 @@ const employeeData = [
   },
 ];
 
+const employeeLeaves = [
+  {
+    id: "1",
+    leaves: [
+      { title: "Rony Leave", start: new Date(2024, 5, 20), end: new Date(2024, 5, 22), allDay: true },
+    ],
+  },
+  {
+    id: "2",
+    leaves: [
+      { title: "William Leave", start: new Date(2024, 5, 25), end: new Date(2024, 5, 27), allDay: true },
+    ],
+  },
+  {
+    id: "3",
+    leaves: [
+      { title: "John Leave", start: new Date(2024, 5, 10), end: new Date(2024, 5, 12), allDay: true },
+    ],
+  },
+];
+
 const EmployeeTable = ({ searchQuery }) => {
   const [expandedRows, setExpandedRows] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const history = useHistory();
 
   const handleToggle = (id) => {
@@ -104,158 +142,239 @@ const EmployeeTable = ({ searchQuery }) => {
     });
   };
 
+  const handleDeleteClick = (employee) => {
+    setSelectedEmployee(employee);
+    setIsDialogOpen(true);
+  };
+
+  const handleDeleteAccount = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleDeactivateAccount = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleCalendarClick = (employee) => {
+    setSelectedEmployee(employee);
+    setIsCalendarOpen(true);
+  };
+
+  const getEmployeeLeaves = (employeeId) => {
+    const employeeLeave = employeeLeaves.find((leave) => leave.id === employeeId);
+    return employeeLeave ? employeeLeave.leaves : [];
+  };
+
   const filteredData = employeeData.filter((employee) =>
     employee.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const bgColor = useColorModeValue("gray.50", "gray.700");
   const cardBgColor = useColorModeValue("white", "gray.800");
   const cardBorderColor = useColorModeValue("gray.200", "gray.700");
 
   return (
-    <Table variant="simple">
-      <Thead>
-        <Tr>
-          <Th>ID</Th>
-          <Th>Name</Th>
-          <Th>Email</Th>
-          <Th>Role</Th>
-          <Th>Actions</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {filteredData.map((employee) => (
-          <React.Fragment key={employee.id}>
-            <Tr>
-              <Td>{employee.id}</Td>
-              <Td>
-                <HStack spacing={3}>
-                  <Avatar size="sm" src={employee.avatar} />
-                  <Text>{employee.name}</Text>
-                </HStack>
-              </Td>
-              <Td>{employee.email}</Td>
-              <Td>{employee.role}</Td>
-              <Td>
-                <Stack direction="row" spacing={2}>
-                  <Button
-                    size="sm"
-                    colorScheme="blue"
-                    leftIcon={<ViewIcon />}
-                    onClick={() => handleToggle(employee.id)}
+    <>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Name</Th>
+            <Th>Email</Th>
+            <Th>Role</Th>
+            <Th>Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {filteredData.map((employee) => (
+            <React.Fragment key={employee.id}>
+              <Tr>
+                <Td>{employee.id}</Td>
+                <Td>
+                  <HStack spacing={3}>
+                    <Avatar size="sm" src={employee.avatar} />
+                    <Text>{employee.name}</Text>
+                  </HStack>
+                </Td>
+                <Td>{employee.email}</Td>
+                <Td>{employee.role}</Td>
+                <Td>
+                  <Stack direction="row" spacing={2}>
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      leftIcon={<ViewIcon />}
+                      onClick={() => handleToggle(employee.id)}
+                    >
+                      View
+                    </Button>
+                    <IconButton
+                      size="sm"
+                      colorScheme="teal"
+                      icon={<EditIcon />}
+                      onClick={() => handleEdit(employee)}
+                    />
+                    <IconButton
+                      size="sm"
+                      colorScheme="red"
+                      icon={<DeleteIcon />}
+                      onClick={() => handleDeleteClick(employee)}
+                    />
+                    <IconButton
+                      size="sm"
+                      colorScheme="gray"
+                      icon={<CalendarIcon />}
+                      onClick={() => handleCalendarClick(employee)}
+                    />
+                    <IconButton
+                      size="sm"
+                      colorScheme="gray"
+                      icon={
+                        expandedRows.includes(employee.id) ? (
+                          <ChevronUpIcon />
+                        ) : (
+                          <ChevronDownIcon />
+                        )
+                      }
+                      onClick={() => handleToggle(employee.id)}
+                    />
+                  </Stack>
+                </Td>
+              </Tr>
+              <Tr>
+                <Td colSpan="5" p={0}>
+                  <Collapse
+                    in={expandedRows.includes(employee.id)}
+                    animateOpacity
                   >
-                    View
-                  </Button>
-                  <IconButton
-                    size="sm"
-                    colorScheme="teal"
-                    icon={<EditIcon />}
-                    onClick={() => handleEdit(employee)}
-                  />
-                  <IconButton
-                    size="sm"
-                    colorScheme="red"
-                    icon={<DeleteIcon />}
-                  />
-                  <IconButton
-                    size="sm"
-                    colorScheme="gray"
-                    icon={
-                      expandedRows.includes(employee.id) ? (
-                        <ChevronUpIcon />
-                      ) : (
-                        <ChevronDownIcon />
-                      )
-                    }
-                  />
-                </Stack>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td colSpan="5" p={0}>
-                <Collapse
-                  in={expandedRows.includes(employee.id)}
-                  animateOpacity
-                >
-                  <Box
-                    p={4}
-                    bg={cardBgColor}
-                    border="1px"
-                    borderColor={cardBorderColor}
-                    borderRadius="md"
-                    m={2}
-                    shadow="sm"
-                  >
-                    <VStack spacing={3} align="start">
-                      <HStack>
-                        <PhoneIcon />
-                        <Text>
-                          <strong>Phone:</strong> {employee.phone}
-                        </Text>
-                      </HStack>
-                      <HStack>
-                        <CalendarIcon />
-                        <Text>
-                          <strong>Joining Date:</strong> {employee.joiningDate}
-                        </Text>
-                      </HStack>
-                      <HStack>
-                        <CalendarIcon />
-                        <Text>
-                          <strong>Date of Birth:</strong> {employee.dob}
-                        </Text>
-                      </HStack>
-                      <Box>
-                        <Text>
-                          <strong>Tech Stack:</strong>{" "}
-                          {employee.techStack.join(", ")}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>PAN:</strong> {employee.pan}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>Aadhaar:</strong> {employee.aadhaar}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>Group:</strong> {employee.group.join(", ")}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>Currently Working:</strong>{" "}
-                          {employee.currentlyWorking ? "Yes" : "No"}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>Father's Name:</strong> {employee.fathersName}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>Mother's Name:</strong> {employee.mothersName}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>
-                          <strong>Address:</strong> {employee.address}
-                        </Text>
-                      </Box>
-                    </VStack>
-                  </Box>
-                </Collapse>
-              </Td>
-            </Tr>
-          </React.Fragment>
-        ))}
-      </Tbody>
-    </Table>
+                    <Box
+                      p={4}
+                      bg={cardBgColor}
+                      border="1px"
+                      borderColor={cardBorderColor}
+                      borderRadius="md"
+                      m={2}
+                      shadow="sm"
+                    >
+                      <VStack spacing={3} align="start">
+                        <HStack>
+                          <PhoneIcon />
+                          <Text>
+                            <strong>Phone:</strong> {employee.phone}
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <CalendarIcon />
+                          <Text>
+                            <strong>Joining Date:</strong>{" "}
+                            {employee.joiningDate}
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <CalendarIcon />
+                          <Text>
+                            <strong>Date of Birth:</strong> {employee.dob}
+                          </Text>
+                        </HStack>
+                        <Box>
+                          <Text>
+                            <strong>Tech Stack:</strong>{" "}
+                            {employee.techStack.join(", ")}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>PAN:</strong> {employee.pan}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>Aadhaar:</strong> {employee.aadhaar}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>Group:</strong> {employee.group.join(", ")}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>Currently Working:</strong>{" "}
+                            {employee.currentlyWorking ? "Yes" : "No"}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>Father's Name:</strong>{" "}
+                            {employee.fathersName}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>Mother's Name:</strong>{" "}
+                            {employee.mothersName}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text>
+                            <strong>Address:</strong> {employee.address}
+                          </Text>
+                        </Box>
+                      </VStack>
+                    </Box>
+                  </Collapse>
+                </Td>
+              </Tr>
+            </React.Fragment>
+          ))}
+        </Tbody>
+      </Table>
+
+      <AlertDialog
+        isOpen={isDialogOpen}
+        leastDestructiveRef={undefined}
+        onClose={() => setIsDialogOpen(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete or Deactivate Account
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure you want to delete or deactivate this account?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+              <Button colorScheme="red" onClick={handleDeleteAccount} ml={3}>
+                Delete
+              </Button>
+              <Button
+                colorScheme="orange"
+                onClick={handleDeactivateAccount}
+                ml={3}
+              >
+                Deactivate
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <Modal isOpen={isCalendarOpen} onClose={() => setIsCalendarOpen(false)} size="5xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Employee Leaves</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <MyCalendar employeeLeaves={getEmployeeLeaves(selectedEmployee?.id)} />
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={() => setIsCalendarOpen(false)}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

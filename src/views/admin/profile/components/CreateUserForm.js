@@ -149,7 +149,6 @@ const CreateUserForm = () => {
                       name="id"
                       placeholder="ID"
                       bg="white"
-                      isDisabled
                     />
                     <FormErrorMessage>{errors.id}</FormErrorMessage>
                   </FormControl>
@@ -398,9 +397,7 @@ const CreateUserForm = () => {
                     <FormLabel htmlFor="aadhaar">Aadhaar</FormLabel>
                     <Button
                       colorScheme="purple"
-                      onClick={() =>
-                        document.getElementById("aadhaar").click()
-                      }
+                      onClick={() => document.getElementById("aadhaar").click()}
                     >
                       Upload Aadhaar
                       <Icon as={FiUpload} m={2} />
@@ -417,7 +414,6 @@ const CreateUserForm = () => {
                     <FormErrorMessage>{errors.aadhaar}</FormErrorMessage>
                   </FormControl>
                 </GridItem>
-             
               </Grid>
               <FormControl>
                 <FormLabel htmlFor="avatar">Profile Pic</FormLabel>
@@ -458,7 +454,7 @@ const CreateUserForm = () => {
                 />
               </FormControl>
               <Box alignSelf="end">
-                <Button type="submit" colorScheme="purple">
+                <Button type="submit" colorScheme="blue">
                   Submit
                 </Button>
               </Box>

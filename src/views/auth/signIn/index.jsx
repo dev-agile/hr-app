@@ -1,29 +1,5 @@
-/* eslint-disable */
-/*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
-=========================================================
-* Horizon UI - v1.1.0
-=========================================================
-
-* Product Page: https://www.horizon-ui.com/
-* Copyright 2023 Horizon UI (https://www.horizon-ui.com/)
-
-* Designed and Coded by Simmmple
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-import React from "react";
-import { NavLink,useHistory } from "react-router-dom";
-// Chakra imports
+import React, { useState } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 import {
   Box,
   Button,
@@ -39,15 +15,13 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-// Custom components
+
 import { HSeparator } from "components/separator/Separator";
 import DefaultAuth from "layouts/auth/Default";
-// Assets
 import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
-
 
 function SignIn() {
   const history = useHistory();
@@ -67,11 +41,42 @@ function SignIn() {
     { bg: "secondaryGray.300" },
     { bg: "whiteAlpha.200" }
   );
-  const [show, setShow] = React.useState(false);
+
+  const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
   const handleClick = () => setShow(!show);
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 8;
+  };
+
   const handleSignIn = () => {
-    history.push("/admin/default"); 
+    let valid = true;
+    let errors = { email: "", password: "" };
+
+    if (!validateEmail(email)) {
+      errors.email = "Please enter a valid email address.";
+      valid = false;
+    }
+
+    if (!validatePassword(password)) {
+      errors.password = "Password must be at least 8 characters.";
+      valid = false;
+    }
+
+    setErrors(errors);
+
+    if (valid) {
+      history.push("/admin/default");
+    }
   };
 
   return (
@@ -93,7 +98,13 @@ function SignIn() {
           <Heading color={textColor} fontSize="36px" mb="10px">
             Sign In
           </Heading>
-          <Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
+          <Text
+            mb="36px"
+            ms="4px"
+            color={textColorSecondary}
+            fontWeight="400"
+            fontSize="md"
+          >
             Enter your email and password to sign in!
           </Text>
         </Box>
@@ -153,8 +164,21 @@ function SignIn() {
               mb="24px"
               fontWeight="500"
               size="lg"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <FormLabel ms="4px" fontSize="sm" fontWeight="500" color={textColor} display="flex">
+            {errors.email && (
+              <Text color="red.500" fontSize="sm" mt="-20px" mb="20px">
+                {errors.email}
+              </Text>
+            )}
+            <FormLabel
+              ms="4px"
+              fontSize="sm"
+              fontWeight="500"
+              color={textColor}
+              display="flex"
+            >
               Password<Text color={brandStars}>*</Text>
             </FormLabel>
             <InputGroup size="md">
@@ -166,6 +190,8 @@ function SignIn() {
                 size="lg"
                 type={show ? "text" : "password"}
                 variant="auth"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <InputRightElement display="flex" alignItems="center" mt="4px">
                 <Icon
@@ -176,9 +202,18 @@ function SignIn() {
                 />
               </InputRightElement>
             </InputGroup>
+            {errors.password && (
+              <Text color="red.500" fontSize="sm" mt="-20px" mb="20px">
+                {errors.password}
+              </Text>
+            )}
             <Flex justifyContent="space-between" align="center" mb="24px">
               <FormControl display="flex" alignItems="center">
-                <Checkbox id="remember-login" colorScheme="brandScheme" me="10px" />
+                <Checkbox
+                  id="remember-login"
+                  colorScheme="brandScheme"
+                  me="10px"
+                />
                 <FormLabel
                   htmlFor="remember-login"
                   mb="0"
@@ -190,7 +225,12 @@ function SignIn() {
                 </FormLabel>
               </FormControl>
               <NavLink to="/auth/forgot-password">
-                <Text color={textColorBrand} fontSize="sm" w="124px" fontWeight="500">
+                <Text
+                  color={textColorBrand}
+                  fontSize="sm"
+                  w="124px"
+                  fontWeight="500"
+                >
                   Forgot password?
                 </Text>
               </NavLink>
@@ -202,7 +242,7 @@ function SignIn() {
               w="100%"
               h="50"
               mb="24px"
-              onClick={handleSignIn} 
+              onClick={handleSignIn}
             >
               Sign In
             </Button>
@@ -217,7 +257,12 @@ function SignIn() {
             <Text color={textColorDetails} fontWeight="400" fontSize="14px">
               Not registered yet?
               <NavLink to="/auth/sign-up">
-                <Text color={textColorBrand} as="span" ms="5px" fontWeight="500">
+                <Text
+                  color={textColorBrand}
+                  as="span"
+                  ms="5px"
+                  fontWeight="500"
+                >
                   Create an Account
                 </Text>
               </NavLink>

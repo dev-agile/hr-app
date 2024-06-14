@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/react";
 import EmployeeTable from "./components/EmployeeTable";
 import { useHistory } from "react-router-dom";
+import { LeaveRequestCard } from "../default/components/LeaveRequest";
+import { leaveRequests } from "utils/mockData";
 
 
 export default function Marketplace() {
@@ -19,7 +21,6 @@ export default function Marketplace() {
 
   return (
     <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
-      {/* Main Fields */}
       <Grid
         mb="20px"
         gridTemplateColumns={{ xl: "1fr" }}
@@ -65,6 +66,15 @@ export default function Marketplace() {
           </Flex>
         </Flex>
       </Grid>
+
+      <Box p="5" bg="white" minH="100vh">
+            <Text fontSize="2xl" fontWeight="bold" m={2}>
+                  Leave Requests
+                </Text>
+          {leaveRequests.map((request, index) => (
+            <LeaveRequestCard key={index} {...request} />
+          ))}
+        </Box>
     </Box>
   );
 }
