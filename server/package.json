@@ -9,7 +9,9 @@
     "format": "prettier --write .",
     "prettier:check": "prettier --check .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "build": "tsc",  
+    "start-prod": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
