@@ -70,6 +70,7 @@ export default function Marketplace() {
       <Box p="5" bg="white" minH="100vh">
             <Text fontSize="2xl" fontWeight="bold" m={2}>
                   Leave Requests
+                  
                 </Text>
           {leaveRequests.map((request, index) => (
             <LeaveRequestCard key={index} {...request} />

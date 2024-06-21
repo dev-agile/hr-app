@@ -103,19 +103,34 @@ const employeeLeaves = [
   {
     id: "1",
     leaves: [
-      { title: "Rony Leave", start: new Date(2024, 5, 20), end: new Date(2024, 5, 22), allDay: true },
+      {
+        title: "Rony Leave",
+        start: new Date(2024, 5, 20),
+        end: new Date(2024, 5, 22),
+        allDay: true,
+      },
     ],
   },
   {
     id: "2",
     leaves: [
-      { title: "William Leave", start: new Date(2024, 5, 25), end: new Date(2024, 5, 27), allDay: true },
+      {
+        title: "William Leave",
+        start: new Date(2024, 5, 25),
+        end: new Date(2024, 5, 27),
+        allDay: true,
+      },
     ],
   },
   {
     id: "3",
     leaves: [
-      { title: "John Leave", start: new Date(2024, 5, 10), end: new Date(2024, 5, 12), allDay: true },
+      {
+        title: "John Leave",
+        start: new Date(2024, 5, 10),
+        end: new Date(2024, 5, 12),
+        allDay: true,
+      },
     ],
   },
 ];
@@ -161,7 +176,9 @@ const EmployeeTable = ({ searchQuery }) => {
   };
 
   const getEmployeeLeaves = (employeeId) => {
-    const employeeLeave = employeeLeaves.find((leave) => leave.id === employeeId);
+    const employeeLeave = employeeLeaves.find(
+      (leave) => leave.id === employeeId
+    );
     return employeeLeave ? employeeLeave.leaves : [];
   };
 
@@ -359,13 +376,18 @@ const EmployeeTable = ({ searchQuery }) => {
         </AlertDialogOverlay>
       </AlertDialog>
 
-      <Modal isOpen={isCalendarOpen} onClose={() => setIsCalendarOpen(false)} size="5xl">
+      <Modal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        size="5xl"
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Employee Leaves</ModalHeader>
-          <ModalCloseButton />
+          <ModalHeader marginLeft={5}>Employee Leaves</ModalHeader>
           <ModalBody>
-            <MyCalendar employeeLeaves={getEmployeeLeaves(selectedEmployee?.id)} />
+            <MyCalendar
+              employeeLeaves={getEmployeeLeaves(selectedEmployee?.id)}
+            />
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" onClick={() => setIsCalendarOpen(false)}>

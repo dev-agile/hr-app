@@ -43,9 +43,9 @@ export default function UserReports() {
         <LeaveRequestForm />
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px" mb="20px">
+      {/* <SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px" mb="20px">
         <ComplexTable />
-      </SimpleGrid>
+      </SimpleGrid> */}
     </Box>
   );
 }

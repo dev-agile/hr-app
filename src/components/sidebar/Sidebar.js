@@ -38,9 +38,6 @@ function Sidebar(props) {
   let sidebarMargins = "0px";
 
 
-  console.log("routes:::",routes)
-
-  // SIDEBAR
   return (
     <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
       <Box

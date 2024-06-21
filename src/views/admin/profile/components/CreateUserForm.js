@@ -13,6 +13,7 @@ import {
   Switch,
   useToast,
   FormErrorMessage,
+  Icon,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -20,9 +21,8 @@ import ReactSelect from "react-select";
 import CreatableSelect from "react-select/creatable";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { css } from "@emotion/react";
-import { Icon } from "@chakra-ui/react";
 import { FiUpload } from "react-icons/fi";
+import employeeService from "api/services/employeeService";
 
 const validationSchema = Yup.object({
   id: Yup.string().required("ID is required"),
@@ -42,6 +42,11 @@ const validationSchema = Yup.object({
   fathersName: Yup.string().required("Father's Name is required"),
   mothersName: Yup.string().required("Mother's Name is required"),
   address: Yup.string().required("Address is required"),
+  tenthCertificate: Yup.mixed().required("10th Certificate is required"),
+  twelfthCertificate: Yup.mixed().required("12th Certificate is required"),
+  graduationCertificate: Yup.mixed().required(
+    "Graduation Certificate is required"
+  ),
 });
 
 const options = [
@@ -68,33 +73,6 @@ const customStyles = {
   }),
 };
 
-const customDatePickerStyles = css`
-  .react-datepicker-wrapper {
-    width: 100%;
-  }
-  .react-datepicker__input-container {
-    width: 100%;
-  }
-  .chakra-input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    font-size: 1rem;
-    color: #2d3748;
-    background-color: #fff;
-    transition: all 0.2s;
-    &:hover {
-      border-color: #cbd5e0;
-    }
-    &:focus {
-      border-color: #3182ce;
-      box-shadow: 0 0 0 1px #3182ce;
-    }
-  }
-`;
-
 const CreateUserForm = () => {
   const toast = useToast();
   const location = useLocation();
@@ -117,6 +95,9 @@ const CreateUserForm = () => {
     fathersName: "",
     mothersName: "",
     address: "",
+    tenthCertificate: null,
+    twelfthCertificate: null,
+    graduationCertificate: null,
   };
 
   return (
@@ -124,15 +105,61 @@ const CreateUserForm = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, actions) => {
-        console.log(values);
-        toast({
-          title: "User updated.",
-          description: "The user details have been updated successfully.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
+        const payload = {
+          id: values.id,
+          first_name: values.name.split(" ")[0],
+          last_name: values.name.split(" ")[1] || "",
+          email: values.email,
+          password: values.password,
+          dob: values.dob,
+          techStack: values.techStack,
+          joiningDate: values.joiningDate,
+          endingDate: values.endingDate,
+          pan: values.pan,
+          aadhaar: values.aadhaar,
+          group: values.group,
+          role: values.role,
+          fathersName: values.fathersName,
+          mothersName: values.mothersName,
+          address: values.address,
+          tenthCertificate: values.tenthCertificate,
+          twelfthCertificate: values.twelfthCertificate,
+          graduationCertificate: values.graduationCertificate,
+          currentlyWorking: values.currentlyWorking,
+        };
+
+        const formData = new FormData();
+        Object.keys(payload).forEach((key) => {
+          if (Array.isArray(payload[key])) {
+            payload[key].forEach((item) => formData.append(key, item));
+          } else {
+            formData.append(key, payload[key]);
+          }
         });
-        actions.resetForm();
+
+        employeeService
+          .createOrUpdateEmployee(formData)
+          .then((response) => {
+            toast({
+              title: "User updated.",
+              description: "The user details have been updated successfully.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+            });
+            actions.resetForm();
+          })
+          .catch((error) => {
+            toast({
+              title: "An error occurred.",
+              description: error.response
+                ? error.response.data.message
+                : error.message,
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+            });
+          });
       }}
     >
       {({ setFieldValue, values, errors, touched }) => (
@@ -412,6 +439,112 @@ const CreateUserForm = () => {
                       }}
                     />
                     <FormErrorMessage>{errors.aadhaar}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl
+                    isInvalid={
+                      !!errors.tenthCertificate && touched.tenthCertificate
+                    }
+                  >
+                    <FormLabel htmlFor="tenthCertificate">
+                      10th Certificate
+                    </FormLabel>
+                    <Button
+                      colorScheme="purple"
+                      onClick={() =>
+                        document.getElementById("tenthCertificate").click()
+                      }
+                    >
+                      Upload 10th Certificate
+                      <Icon as={FiUpload} m={2} />
+                    </Button>
+                    <input
+                      id="tenthCertificate"
+                      name="tenthCertificate"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        setFieldValue(
+                          "tenthCertificate",
+                          event.currentTarget.files[0]
+                        );
+                      }}
+                    />
+                    <FormErrorMessage>
+                      {errors.tenthCertificate}
+                    </FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl
+                    isInvalid={
+                      !!errors.twelfthCertificate && touched.twelfthCertificate
+                    }
+                  >
+                    <FormLabel htmlFor="twelfthCertificate">
+                      12th Certificate
+                    </FormLabel>
+                    <Button
+                      colorScheme="purple"
+                      onClick={() =>
+                        document.getElementById("twelfthCertificate").click()
+                      }
+                    >
+                      Upload 12th Certificate
+                      <Icon as={FiUpload} m={2} />
+                    </Button>
+                    <input
+                      id="twelfthCertificate"
+                      name="twelfthCertificate"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        setFieldValue(
+                          "twelfthCertificate",
+                          event.currentTarget.files[0]
+                        );
+                      }}
+                    />
+                    <FormErrorMessage>
+                      {errors.twelfthCertificate}
+                    </FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl
+                    isInvalid={
+                      !!errors.graduationCertificate &&
+                      touched.graduationCertificate
+                    }
+                  >
+                    <FormLabel htmlFor="graduationCertificate">
+                      Graduation Certificate
+                    </FormLabel>
+                    <Button
+                      colorScheme="purple"
+                      onClick={() =>
+                        document.getElementById("graduationCertificate").click()
+                      }
+                    >
+                      Upload Graduation Certificate
+                      <Icon as={FiUpload} m={2} />
+                    </Button>
+                    <input
+                      id="graduationCertificate"
+                      name="graduationCertificate"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        setFieldValue(
+                          "graduationCertificate",
+                          event.currentTarget.files[0]
+                        );
+                      }}
+                    />
+                    <FormErrorMessage>
+                      {errors.graduationCertificate}
+                    </FormErrorMessage>
                   </FormControl>
                 </GridItem>
               </Grid>
