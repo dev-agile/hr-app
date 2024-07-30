@@ -1,7 +1,7 @@
 "use strict";
 // httpErrors.js
 Object.defineProperty(exports, "__esModule", { value: true });
-const HTTP_STATUS = {
+const STATUS = {
     OK: 200,
     CREATED: 201,
     ACCEPTED: 202,
@@ -17,4 +17,4 @@ const HTTP_STATUS = {
     NOT_IMPLEMENTED: 501,
     BAD_GATEWAY: 502,
 };
-exports.default = HTTP_STATUS;
+exports.default = STATUS;

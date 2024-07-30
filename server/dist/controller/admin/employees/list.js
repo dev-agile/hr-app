@@ -18,6 +18,6 @@ const constants_1 = require("../../../constants");
 const paginate_1 = __importDefault(require("../../../plugin/paginate"));
 const list = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield (0, paginate_1.default)(model_1.employeeModel.Employee.default);
-    (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.OK, constants_1.RESPONSE_MESSAGES.DATA_FETCHED, data);
+    (0, utils_1.resCustom)(res, constants_1.STATUS.OK, constants_1.MESSAGES.DATA_FETCHED, data);
 });
 exports.default = list;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const RESPONSE_MESSAGES = {
+const MESSAGES = {
     SUCCESS: "Operation successful",
     CREATED: "Resource created successfully",
     ACCEPTED: "Request accepted",
@@ -17,4 +17,4 @@ const RESPONSE_MESSAGES = {
     BAD_GATEWAY: "Bad gateway",
     DATA_FETCHED: "Data fetched successfully"
 };
-exports.default = RESPONSE_MESSAGES;
+exports.default = MESSAGES;

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-function resCustom(
+function sendResponse(
   res: Response,
   statusCode: number,
   message: any,
@@ -11,4 +11,4 @@ function resCustom(
   });
 }
 
-export default resCustom;
+export default sendResponse;

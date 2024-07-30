@@ -3,6 +3,7 @@ import { envConfig } from '../../config';
 
 interface TokenPayload {
     userId: string;
+    role:string
    
   }
 

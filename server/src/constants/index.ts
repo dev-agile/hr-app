@@ -1,7 +1,7 @@
 import ROLES from "./roles";
-import HTTP_STATUS from "./http-status";
-import RESPONSE_MESSAGES from "./response-message";
+import status from "./http-status";
+import messages from "./response-message";
 
 
 
-export {ROLES,HTTP_STATUS,RESPONSE_MESSAGES}
+export {ROLES,status,messages}

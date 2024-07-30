@@ -1,5 +1,5 @@
-import * as  Attendance from "./attendance";
-import * as  Employee from "./employees";
+import  Attendance from "./attendance";
+import Employee from "./employees";
 
 
 export {Attendance, Employee}

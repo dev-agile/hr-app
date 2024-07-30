@@ -18,15 +18,15 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     const { email, password } = req.body;
     const user = yield model_1.UserRole.findOne({ email: email });
     if (!user) {
-        (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.NOT_FOUND, constants_1.RESPONSE_MESSAGES.NOT_FOUND, null);
+        (0, utils_1.resCustom)(res, constants_1.STATUS.NOT_FOUND, constants_1.MESSAGES.NOT_FOUND, null);
     }
     const userInfo = yield model_1.employeeModel.Employee.default.findOne({ email: email });
     const passCompare = (0, bcrypt_1.comparePassword)(password, userInfo === null || userInfo === void 0 ? void 0 : userInfo.password);
     if (!passCompare) {
-        (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.UNAUTHORIZED, constants_1.RESPONSE_MESSAGES.UNAUTHORIZED, null);
+        (0, utils_1.resCustom)(res, constants_1.STATUS.UNAUTHORIZED, constants_1.MESSAGES.UNAUTHORIZED, null);
     }
     const accessToken = (0, token_genretor_1.generateAccessToken)(userInfo._id);
     const refreshToken = (0, token_genretor_1.generateRefreshToken)(userInfo._id);
-    yield (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.OK, constants_1.RESPONSE_MESSAGES.DATA_FETCHED, { access_token: accessToken, refresh_token: refreshToken, userInfo });
+    yield (0, utils_1.resCustom)(res, constants_1.STATUS.OK, constants_1.MESSAGES.DATA_FETCHED, { access_token: accessToken, refresh_token: refreshToken, userInfo });
 });
 exports.default = login;

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { adminController } from "../../controller";
-import { catchAsync } from "../../utils";
+import { adminController } from "@controller";
+import { catchAsync } from "@utils";
 
 
 const router = Router()
@@ -9,10 +9,12 @@ const router = Router()
 /**
  * @swagger
  * /api/v1/admin/employees/upsert:
- *   post:
+ *   put:
  *     summary: Create or update an employee
  *     tags:
- *       - Employees
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -62,7 +64,9 @@ const router = Router()
  *   get:
  *     summary: Get a paginated list of employees
  *     tags:
- *       - Employees
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page

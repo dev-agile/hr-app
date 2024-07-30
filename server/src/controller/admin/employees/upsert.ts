@@ -1,91 +1,70 @@
 import { Request, Response } from 'express';
-import { employeeModel, UserRole } from '../../../model';
-import { resCustom } from '../../../utils';
-import { HTTP_STATUS, RESPONSE_MESSAGES } from '../../../constants';
-import { ROLES } from '../../../constants';
-import { hashPassword } from '../../../utils/bcrypt';
-import { employeeRegister } from '../../../validation/employees';
+import { employeeModel, UsersRole } from '@model';
+import { sendResponse, bcrypt } from '@utils';
+import { status, messages, ROLES } from '@constants';
+import employeesValidation from '@validation';
+import { v4 as uuidv4 } from 'uuid';
 
-// POST /employees/create
-const usert = async (req: Request, res: Response): Promise<void> => {
- 
-    const {
-      id,
-      first_name,
-      last_name,
-      position,
-      department,
-      salary,
-      aadhar_image,
-      pan_image,
-      qualification_images,
-      email,
-      password
-    } = req.body;
+const upsert = async (req: Request, res: Response): Promise<void> => {
+  const { _id, password, ...rest } = req.body;
 
-    let employee;
-   
+  const { error } = employeesValidation.employeesValidation.default.validate(
+    req.body,
+    { abortEarly: false },
+  );
 
-    const hashedPassword = await hashPassword(password);
+  if (error) {
+    const errorMessages = error.details.map((err: any) => ({
+      field: err.path[0],
+      message: err.message,
+    }));
+    return sendResponse(res, status.not_acceptable, errorMessages, null);
+  }
+  console.log(password);
 
-    const { error, value } = employeeRegister.validate(req.body, { abortEarly: false });
+  const hashedPassword = await bcrypt.hash(password);
 
-    if (error) {
-    
-      const errorMessages = error.details.map((err) => ({
-        field: err.path[0],
-        message: err.message,
-      }));
-      return   resCustom(res,HTTP_STATUS.NOT_ACCEPTABLE, errorMessages, null);
-    }
-    
+  let employee;
 
-    if (id) {
-      // Update existing employee
-      employee = await employeeModel.Employee.default.findOneAndUpdate(
-        { _id: id },
-        {
-          first_name,
-          last_name,
-          position,
-          department,
-          salary,
-          aadhar_image,
-          pan_image,
-          qualification_images,
-          email,
-          password:  hashedPassword
-        },
-        {
-          new: true,
-          runValidators: true
-        }
+  if (_id) {
+    employee = await employeeModel.Employee.findOneAndUpdate(
+      { _id },
+      {
+        ...rest,
+        password: hashedPassword,
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!employee) {
+      return sendResponse(
+        res,
+        status.not_found,
+        messages.employee_not_found,
+        null,
       );
-      
-      if (!employee) {
-        resCustom(res, HTTP_STATUS.NOT_FOUND, RESPONSE_MESSAGES.NOT_FOUND, null);
-      }
-    } else {
-
-   
-      employee = await employeeModel.Employee.default.create({
-        first_name,
-        last_name,
-        position,
-        department,
-        salary,
-        aadhar_image,
-        pan_image,
-        qualification_images,
-        email,
-        password:  hashedPassword
-      });
-      
-      await UserRole.create({ email, role: ROLES.EMPLOYEE });
     }
+    sendResponse(res, status.created, messages.employee_updated, null);
+  } else {
+    employee = await employeeModel.Employee.create({
+      _id: uuidv4(),
+      password: hashedPassword,
+      ...rest,
+    });
+  
+    const userRol = await UsersRole.create({
+      email_address: rest.email_address,
+      user_id: employee._id,
+      role: ROLES.EMPLOYEE,
+      password: hashedPassword,
+    });
+    sendResponse(res, status.created, messages.employee_created, null);
+  }
 
-    resCustom(res, HTTP_STATUS.OK, RESPONSE_MESSAGES.SUCCESS, employee);
- 
+  
 };
 
-export default usert;
+export default upsert;

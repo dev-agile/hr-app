@@ -1,25 +1,20 @@
 // httpErrors.js
 
-const HTTP_STATUS = {
+const status = {
+  ok: 200,
+  created: 201,
+  accepted: 202,
+  bad_request: 400,
+  unauthorized: 401,
+  payment_required: 402,
+  forbidden: 403,
+  not_found: 404,
+  method_not_allowed: 405,
+  not_acceptable: 406,
+  proxy_authentication_required: 407,
+  internal_server_error: 500,
+  not_implemented: 501,
+  bad_gateway: 502,
+};
 
-    OK: 200,
-    CREATED: 201,
-    ACCEPTED: 202,
-
-    BAD_REQUEST: 400,
-    UNAUTHORIZED: 401,
-    PAYMENT_REQUIRED: 402,
-    FORBIDDEN: 403,
-    NOT_FOUND: 404,
-    METHOD_NOT_ALLOWED: 405,
-    NOT_ACCEPTABLE: 406,
-    PROXY_AUTHENTICATION_REQUIRED: 407,
-
-    INTERNAL_SERVER_ERROR: 500,
-    NOT_IMPLEMENTED: 501,
-    BAD_GATEWAY: 502,
-   
-  };
-  
-  export default  HTTP_STATUS ;
-  
+export default status;

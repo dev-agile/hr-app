@@ -1,29 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '../utils/jwt';
-import { resCustom } from '../utils';
-import { HTTP_STATUS, RESPONSE_MESSAGES } from '../constants';
+import { sendResponse } from '../utils';
+import { status, messages } from '../constants';
 
 interface AuthRequest extends Request {
-  userId?: string;
+  body: {
+    _id?: string;
+    role?: string;
+  };
 }
 
 const accessToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-     return  resCustom(res,HTTP_STATUS.UNAUTHORIZED,RESPONSE_MESSAGES.UNAUTHORIZED,null)
-
+    return sendResponse(res, status.unauthorized, messages.unauthorized, null);
   }
 
   const token = authHeader.split(' ')[1];
 
   try {
-    const payload = verifyAccessToken(token);
-    req.userId = payload.userId; // Attach userId to the request object for further use
+    const payload = verifyAccessToken(token) as { userId: string; role: string };
+    req.body._id = payload.userId; // Attach userId to the request object for further use
+    req.body.role = payload.role;
     next();
-  } catch (error) {
-    return  resCustom(res,HTTP_STATUS.UNAUTHORIZED,"invalid token",null)
+  } catch (error: any) {
+    if (error.name === 'TokenExpiredError') {
+      return sendResponse(res, status.unauthorized, messages.token_expired, null);
+    } else {
+      return sendResponse(res, status.unauthorized, messages.invalid_token, null);
+    }
   }
 };
 
-export default accessToken
+export default accessToken;

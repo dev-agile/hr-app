@@ -1,56 +1,100 @@
+
 import Joi from "joi";
 
 const employeeRegister = Joi.object({
-  id: Joi.string().optional(),
-  first_name: Joi.string().required().messages({
-    'any.required': 'First name is required',
-    'string.empty': 'First name cannot be empty',
-  }),
-  last_name: Joi.string().required().messages({
-    'any.required': 'Last name is required',
-    'string.empty': 'Last name cannot be empty',
-  }),
-  position: Joi.string().required().messages({
-    'any.required': 'Position is required',
-    'string.empty': 'Position cannot be empty',
-  }),
-  department: Joi.string().required().messages({
-    'any.required': 'Department is required',
-    'string.empty': 'Department cannot be empty',
-  }),
-  salary: Joi.number().required().messages({
-    'any.required': 'Salary is required',
-    'number.base': 'Salary must be a number',
-  }),
-  aadhar_image: Joi.string().required().messages({
-    'any.required': 'Aadhar image is required',
-    'string.empty': 'Aadhar image cannot be empty',
-  }),
-  pan_image: Joi.string().required().messages({
-    'any.required': 'Pan image is required',
-    'string.empty': 'Pan image cannot be empty',
-  }),
-  qualification_images: Joi.array()
-    .items(Joi.string())
-    .required()
+  _id: Joi.string().guid({ version: 'uuidv4' }).optional()
     .messages({
-      'any.required': 'Qualification images are required',
-      'array.base': 'Qualification images must be an array',
-      'array.empty': 'Qualification images cannot be empty',
+      'string.guid': '_id must be a valid UUID v4',
     }),
-  email: Joi.string().email().required().messages({
-    'any.required': 'Email is required',
-    'string.empty': 'Email cannot be empty',
-    'string.email': 'Email must be a valid email address',
-  }),
-  password: Joi.string().required().messages({
+  first_name: Joi.string().required()
+    .messages({
+      'string.base': 'First name must be a string',
+      'any.required': 'First name is required',
+    }),
+  last_name: Joi.string().optional()
+    .messages({
+      'string.base': 'Last name must be a string',
+    }),
+  dob: Joi.string().required()
+    .messages({
+      'string.base': 'Date of birth must be a string',
+      'any.required': 'Date of birth is required',
+    }),
+  tech_stack: Joi.string().required()
+    .messages({
+      'string.base': 'Tech stack must be a string',
+      'any.required': 'Tech stack is required',
+    }),
+  joining_date: Joi.string().required()
+    .messages({
+      'string.base': 'Joining date must be a string',
+      'any.required': 'Joining date is required',
+    }),
+  ending_date: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'Ending date must be a string',
+    }),
+  pan_image: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'PAN image must be a string',
+    }),
+  aadhaar_image: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'Aadhaar image must be a string',
+    }),
+  group: Joi.string().required()
+    .messages({
+      'string.base': 'Group must be a string',
+      'any.required': 'Group is required',
+    }),
+  avatar: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'Avatar must be a string',
+    }),
+  currently_working: Joi.boolean().required()
+    .messages({
+      'boolean.base': 'Currently working must be a boolean',
+      'any.required': 'Currently working is required',
+    }),
+  father_name: Joi.string().required()
+    .messages({
+      'string.base': 'Father name must be a string',
+      'any.required': 'Father name is required',
+    }),
+  mother_name: Joi.string().required()
+    .messages({
+      'string.base': 'Mother name must be a string',
+      'any.required': 'Mother name is required',
+    }),
+  address: Joi.string().required()
+    .messages({
+      'string.base': 'Address must be a string',
+      'any.required': 'Address is required',
+    }),
+  tenth_certificate: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'Tenth Certificate must be a string',
+    }),
+  twelfth_certificate: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'Twelfth Certificate must be a string',
+    }),
+  graduation_certificate: Joi.string().optional().allow(null)
+    .messages({
+      'string.base': 'Graduation Certificate must be a string',
+    }),
+  password:  Joi.string().required()
+  .messages({
+    'string.base': 'Password must be a string',
     'any.required': 'Password is required',
-    'string.empty': 'Password cannot be empty',
+  }),
+  email_address:  Joi.string().required()
+  .messages({
+    'string.base': 'Email Address must be a string',
+    'any.required': 'Email Address is required',
   }),
 });
 
-export { employeeRegister};
 
 
-
-
+export default employeeRegister

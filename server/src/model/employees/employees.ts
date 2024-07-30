@@ -1,79 +1,108 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface IEmployee extends Document {
-    _id: string;
-    first_name: string;
-    last_name: string;
-    position: string;
-    department: string;
-    salary: number;
-    hired_date: Date;
-    aadhar_image: string;
-    pan_image: string;
-    qualification_images: string[];
-    email: string;
-    password: string;
+  _id: string;
+  first_name: string;
+  last_name?: string;
+  dob: string;
+  tech_stack: string;
+  joining_date: string;
+  ending_date?: string | null;
+  pan_image?: string | null;
+  aadhaar_image?: string | null;
+  group: string;
+  avatar?: string | null;
+  currently_working: boolean;
+  father_name: string;
+  mother_name: string;
+  address: string;
+  tenth_certificate?: string | null;
+  twelfth_certificate?: string | null;
+  graduation_certificate?: string | null;
 }
 
-const employeeSchema = new mongoose.Schema({
-    _id: {
-        type: String,
-        default: uuidv4,
-    },
-    first_name: {
-        type: String,
-        required: true,
-    },
-    last_name: {
-        type: String,
-        required: true,
-    },
-    position: {
-        type: String,
-        required: true,
-    },
-    department: {
-        type: String,
-        required: true,
-    },
-    salary: {
-        type: Number,
-        required: true,
-    },
-    hired_date: {
-        type: Date,
-        default: Date.now,
-    },
-    aadhar_image: {
-        type: String,
-        required: true,
-    },
-    pan_image: {
-        type: String,
-        required: true,
-    },
-    qualification_images: [{
-        type: String,
-    }],
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        validate: {
-            validator: function (email: string) {
-                // Simple email validation regex
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            },
-            message: 'Invalid email format'
-        }
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 6,
-    },
+const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: uuidv4,
+  },
+  first_name: {
+    type: String,
+    required: true,
+  },
+  last_name: {
+    type: String,
+    required: false,
+  },
+  dob: {
+    type: String,
+    required: true,
+  },
+  tech_stack: {
+    type: String,
+    required: true,
+  },
+  joining_date: {
+    type: String,
+    required: true,
+  },
+  ending_date: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  pan_image: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  aadhaar_image: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  group: {
+    type: String,
+    required: true,
+  },
+  avatar: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  currently_working: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
+  father_name: {
+    type: String,
+    required: true,
+  },
+  mother_name: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  tenth_certificate: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  twelfth_certificate: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  graduation_certificate: {
+    type: String,
+    required: false,
+    default: null,
+  },
 });
 
 const Employee = mongoose.model<IEmployee>('Employee', employeeSchema);

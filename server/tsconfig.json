@@ -6,7 +6,22 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@config": ["src/config"],
+      "@constants": ["src/constants"],
+      "@controller": ["src/controller"],
+      "@docs": ["src/docs"],
+      "@middleware": ["src/middleware"],
+      "@model": ["src/model"],
+      "@plugin": ["src/plugin"],
+      "@routes": ["src/routes"],
+      "@service": ["src/service/*"],
+      "@utils": ["src/utils"],
+      "@validation": ["src/validation"],
+      "@enums": ["src/enums"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/*.spec.ts"]

@@ -26,7 +26,7 @@ const usert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             field: err.path[0],
             message: err.message,
         }));
-        return (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.NOT_ACCEPTABLE, errorMessages, null);
+        return (0, utils_1.resCustom)(res, constants_1.STATUS.NOT_ACCEPTABLE, errorMessages, null);
     }
     if (id) {
         // Update existing employee
@@ -46,7 +46,7 @@ const usert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             runValidators: true
         });
         if (!employee) {
-            (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.NOT_FOUND, constants_1.RESPONSE_MESSAGES.NOT_FOUND, null);
+            (0, utils_1.resCustom)(res, constants_1.STATUS.NOT_FOUND, constants_1.MESSAGES.NOT_FOUND, null);
         }
     }
     else {
@@ -64,6 +64,6 @@ const usert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         yield model_1.UserRole.create({ email, role: constants_2.ROLES.EMPLOYEE });
     }
-    (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.OK, constants_1.RESPONSE_MESSAGES.SUCCESS, employee);
+    (0, utils_1.resCustom)(res, constants_1.STATUS.OK, constants_1.MESSAGES.SUCCESS, employee);
 });
 exports.default = usert;

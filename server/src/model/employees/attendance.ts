@@ -1,31 +1,36 @@
-// models/Attendance.js
-
-import mongoose from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
+import { AttendanceStatus } from '@enums';
 
-const { Schema, model } = mongoose;
 
-const attendanceSchema = new Schema({
-  _id: {
+
+
+
+interface IAttendance extends Document {
+  user_id: string;
+  date: string;
+  check_in?: string;
+  check_out?: string;
+  status: AttendanceStatus;
+  working_hours:string
+}
+
+
+const AttendanceSchema = new Schema<IAttendance>({
+  _id: { type: String, default: uuidv4 }, 
+  user_id: { type: String, ref: 'Employee', required: true },
+  date: { type: String, default: () => moment().format('DD-MM-YYYY') },
+  check_in: { type: String },
+  check_out: { type: String },
+  status: {
     type: String,
-    default: uuidv4,
+    enum: Object.values(AttendanceStatus),
+   
   },
-  userId: {
-    type: String,
-    required: true,
-  },
-  entryTime: {
-    type: Date,
-  },
-  exitTime: {
-    type: Date,
-  },
-  attendanceDate: {
-    type: Date,
-    default: Date.now, 
-  },
+  working_hours:{type:String,}
 });
 
-const Attendance = model('Attendance', attendanceSchema);
 
+const Attendance = model<IAttendance>('Attendance', AttendanceSchema);
 export default Attendance;

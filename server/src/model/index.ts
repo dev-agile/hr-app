@@ -1,5 +1,5 @@
 import * as employeeModel from './employees'
-import UserRole from './user-role'
+import UsersRole from './user-role'
 
 
-export {employeeModel,UserRole}
+export {employeeModel,UsersRole}

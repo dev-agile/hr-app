@@ -3,9 +3,9 @@ import swaggerJSDoc from 'swagger-jsdoc';
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'HR app API with Swagger',
+    title: 'HR app APIs',
     version: '1.0.0',
-    description: 'Documentation for HR app API using Swagger',
+    description: 'Documentation for Hr-app APIs',
   },
   servers: [
     {
@@ -13,6 +13,15 @@ const swaggerDefinition = {
       description: 'Development server',
     },
   ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
 };
 
 const options: swaggerJSDoc.Options = {

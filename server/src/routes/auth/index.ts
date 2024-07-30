@@ -1,6 +1,6 @@
 import { Router } from "express";
-import catchAsync from "../../utils/catchAsync";
-import { authController } from "../../controller";
+import {catchAsync} from "@utils";
+import { authController } from "@controller";
 const router = Router()
 
 
@@ -18,7 +18,7 @@ const router = Router()
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               email_address:
  *                 type: string
  *               password:
  *                 type: string

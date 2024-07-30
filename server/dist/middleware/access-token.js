@@ -6,7 +6,7 @@ const constants_1 = require("../constants");
 const accessToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.UNAUTHORIZED, constants_1.RESPONSE_MESSAGES.UNAUTHORIZED, null);
+        return (0, utils_1.resCustom)(res, constants_1.STATUS.UNAUTHORIZED, constants_1.MESSAGES.UNAUTHORIZED, null);
     }
     const token = authHeader.split(' ')[1];
     try {
@@ -15,7 +15,7 @@ const accessToken = (req, res, next) => {
         next();
     }
     catch (error) {
-        return (0, utils_1.resCustom)(res, constants_1.HTTP_STATUS.UNAUTHORIZED, "invalid token", null);
+        return (0, utils_1.resCustom)(res, constants_1.STATUS.UNAUTHORIZED, "invalid token", null);
     }
 };
 exports.default = accessToken;
