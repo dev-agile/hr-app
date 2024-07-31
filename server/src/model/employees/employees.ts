@@ -60,6 +60,7 @@ export interface IEmployee extends Document {
       end_date: Date;
     }[];
   };
+  documents: string[]; // Array of document paths
 }
 
 const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
@@ -252,6 +253,12 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
       },
     ],
   },
+  documents: [
+    {
+      type: String,
+      required: true,
+    },
+  ], // Array of document paths
 });
 
 const Employee = mongoose.model<IEmployee>('Employee', employeeSchema);

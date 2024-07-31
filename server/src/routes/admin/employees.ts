@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { adminController } from "@controller";
-import { catchAsync } from "@utils";
+import { Router } from 'express';
+import { adminController } from '@controller';
+import { catchAsync } from '@utils';
+import upload from '../../middleware/multer-config'; // Update this path as necessary
 
-
-const router = Router()
+const router = Router();
 
 /**
  * @swagger
@@ -17,7 +17,7 @@ const router = Router()
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -47,7 +47,15 @@ const router = Router()
  *                 description: The marital status of the employee.
  *               photo:
  *                 type: string
- *                 description: The URL of the employee's photo.
+ *                 format: binary
+ *                 description: The photo of the employee.
+ *               documents:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                   description: The path to a document associated with the employee.
+ *                 description: List of paths to documents associated with the employee.
  *               designation:
  *                 type: string
  *                 description: The job designation of the employee.
@@ -162,6 +170,10 @@ const router = Router()
  *                         end_date:
  *                           type: string
  *                           format: date
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: The password for the employee. Required for creation.
  *     responses:
  *       '200':
  *         description: Successful operation
@@ -190,31 +202,19 @@ const router = Router()
  *         schema:
  *           type: integer
  *         required: false
- *         
  *       - in: query
  *         name: page_size
  *         schema:
  *           type: integer
- *         required: false
- *         description: |
- *           Number of items per page (default: 10)
+ *           required: false
  *     responses:
  *       '200':
  *         description: Successful operation
  *       '500':
  *         description: Server error
- *        
  */
 
-router.get("/", catchAsync(adminController.employees.list))
-router.post("/upsert", catchAsync(adminController.employees.upsert))
+router.get("/", catchAsync(adminController.employees.list));
+router.post("/upsert", upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'documents', maxCount: 10 }]), catchAsync(adminController.employees.upsert));
 
-
-
-
-
-
-
-
-
-export default router
+export default router;
