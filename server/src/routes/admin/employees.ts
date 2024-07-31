@@ -5,11 +5,10 @@ import { catchAsync } from "@utils";
 
 const router = Router()
 
-
 /**
  * @swagger
  * /api/v1/admin/employees/upsert:
- *   put:
+ *   post:
  *     summary: Create or update an employee
  *     tags:
  *       - Admin
@@ -22,33 +21,152 @@ const router = Router()
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               employee_id:
  *                 type: string
+ *                 format: uuid
+ *                 description: The unique identifier for the employee. Required for updates.
+ *                 nullable: true
  *               first_name:
  *                 type: string
+ *                 description: The first name of the employee.
  *               last_name:
  *                 type: string
- *               position:
+ *                 description: The last name of the employee.
+ *               date_of_birth:
  *                 type: string
- *               department:
+ *                 format: date
+ *                 description: The date of birth of the employee.
+ *               gender:
  *                 type: string
- *               salary:
- *                 type: number
- *               aadhar_image:
+ *                 description: The gender of the employee.
+ *               nationality:
  *                 type: string
- *               pan_image:
+ *                 description: The nationality of the employee.
+ *               marital_status:
  *                 type: string
- *               qualification_images:
- *                 type: array
- *                 items:
- *                   type: string
- *               email:
+ *                 description: The marital status of the employee.
+ *               photo:
  *                 type: string
- *               password:
+ *                 description: The URL of the employee's photo.
+ *               designation:
  *                 type: string
+ *                 description: The job designation of the employee.
+ *               joining_date:
+ *                 type: string
+ *                 format: date
+ *                 description: The joining date of the employee.
+ *               ending_date:
+ *                 type: string
+ *                 format: date
+ *                 description: The ending date of the employee.
+ *               father_name:
+ *                 type: string
+ *                 description: The name of the employee's father.
+ *               mother_name:
+ *                 type: string
+ *                 description: The name of the employee's mother.
+ *               contact_information:
+ *                 type: object
+ *                 properties:
+ *                   email:
+ *                     type: string
+ *                     description: The email address of the employee.
+ *                   phone_number:
+ *                     type: string
+ *                     description: The phone number of the employee.
+ *                   address:
+ *                     type: object
+ *                     properties:
+ *                       permanent:
+ *                         type: object
+ *                         properties:
+ *                           street:
+ *                             type: string
+ *                           city:
+ *                             type: string
+ *                           state:
+ *                             type: string
+ *                           zip_code:
+ *                             type: string
+ *                           country:
+ *                             type: string
+ *                       current:
+ *                         type: object
+ *                         properties:
+ *                           street:
+ *                             type: string
+ *                           city:
+ *                             type: string
+ *                           state:
+ *                             type: string
+ *                           zip_code:
+ *                             type: string
+ *                           country:
+ *                             type: string
+ *                   emergency_contact:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                       relationship:
+ *                         type: string
+ *                       phone_number:
+ *                         type: string
+ *               skills_and_qualifications:
+ *                 type: object
+ *                 properties:
+ *                   educational_background:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         degree:
+ *                           type: string
+ *                         institution:
+ *                           type: string
+ *                         graduation_date:
+ *                           type: string
+ *                           format: date
+ *                   certifications:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         name:
+ *                           type: string
+ *                         institution:
+ *                           type: string
+ *                         date_obtained:
+ *                           type: string
+ *                           format: date
+ *                   skills:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   languages_spoken:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   work_experience:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         employer:
+ *                           type: string
+ *                         job_title:
+ *                           type: string
+ *                         start_date:
+ *                           type: string
+ *                           format: date
+ *                         end_date:
+ *                           type: string
+ *                           format: date
  *     responses:
  *       '200':
  *         description: Successful operation
+ *       '201':
+ *         description: Employee created successfully
  *       '400':
  *         description: Validation error
  *       '404':
@@ -56,7 +174,6 @@ const router = Router()
  *       '500':
  *         description: Server error
  */
-
 
 /**
  * @swagger
