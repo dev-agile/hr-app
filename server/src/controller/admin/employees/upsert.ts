@@ -6,8 +6,9 @@ import employeesValidation from '@validation';
 import { v4 as uuidv4 } from 'uuid';
 
 const upsert = async (req: Request, res: Response): Promise<void> => {
-  const { _id, password, ...rest } = req.body;
-
+  const { employee_id, password, ...rest } = req.body;
+  console.log(employee_id);
+  console.log(req.body);
   const { error } = employeesValidation.employeesValidation.default.validate(
     req.body,
     { abortEarly: false },
@@ -20,15 +21,14 @@ const upsert = async (req: Request, res: Response): Promise<void> => {
     }));
     return sendResponse(res, status.not_acceptable, errorMessages, null);
   }
-  console.log(password);
 
   const hashedPassword = await bcrypt.hash(password);
 
   let employee;
 
-  if (_id) {
+  if (employee_id) {
     employee = await employeeModel.Employee.findOneAndUpdate(
-      { _id },
+      { employee_id },
       {
         ...rest,
         password: hashedPassword,
@@ -50,21 +50,19 @@ const upsert = async (req: Request, res: Response): Promise<void> => {
     sendResponse(res, status.created, messages.employee_updated, null);
   } else {
     employee = await employeeModel.Employee.create({
-      _id: uuidv4(),
+      employee_id: uuidv4(),
       password: hashedPassword,
       ...rest,
     });
-  
-    const userRol = await UsersRole.create({
-      email_address: rest.email_address,
+
+    const userRole = await UsersRole.create({
+      email_address: rest.contact_information.email,
       user_id: employee._id,
       role: ROLES.EMPLOYEE,
       password: hashedPassword,
     });
     sendResponse(res, status.created, messages.employee_created, null);
   }
-
-  
 };
 
 export default upsert;

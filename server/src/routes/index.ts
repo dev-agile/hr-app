@@ -5,8 +5,8 @@ import adminRoutes from './admin'
 import employeesRoutes from './employees'
 
 const router = Router()
-router.use("/admin",middleware.adminToken,adminRoutes)
+router.use("/admin",adminRoutes)
 router.use("/auth", authRoutes)
-router.use("/employees",[middleware.accessToken,middleware.employeeToken],employeesRoutes)
+router.use("/employees",employeesRoutes)
 
 export default router

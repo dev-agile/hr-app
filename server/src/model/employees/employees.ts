@@ -2,28 +2,68 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface IEmployee extends Document {
-  _id: string;
+  employee_id: string;
   first_name: string;
-  last_name?: string;
-  dob: string;
-  tech_stack: string;
-  joining_date: string;
-  ending_date?: string | null;
-  pan_image?: string | null;
-  aadhaar_image?: string | null;
-  group: string;
-  avatar?: string | null;
-  currently_working: boolean;
+  last_name: string;
+  date_of_birth: Date;
+  gender: string;
+  nationality: string;
+  marital_status: string;
+  photo: string;
+  designation: string;
+  joining_date: Date;
+  ending_date: Date;
   father_name: string;
   mother_name: string;
-  address: string;
-  tenth_certificate?: string | null;
-  twelfth_certificate?: string | null;
-  graduation_certificate?: string | null;
+  contact_information: {
+    email: string;
+    phone_number: string;
+    address: {
+      permanent: {
+        street: string;
+        city: string;
+        state: string;
+        zip_code: string;
+        country: string;
+      };
+      current: {
+        street: string;
+        city: string;
+        state: string;
+        zip_code: string;
+        country: string;
+      };
+    };
+    emergency_contact: {
+      name: string;
+      relationship: string;
+      phone_number: string;
+    };
+  };
+  skills_and_qualifications: {
+    educational_background: {
+      degree: string;
+      institution: string;
+      graduation_date: Date;
+    }[];
+    certifications: {
+      name: string;
+      institution: string;
+      date_obtained: Date;
+    }[];
+    skills: string[];
+    languages_spoken: string[];
+    work_experience: {
+      employer: string;
+      job_title: string;
+      start_date: Date;
+      end_date: Date;
+    }[];
+  };
 }
 
 const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
-  _id: {
+  employee_id: {
     type: String,
     default: uuidv4,
   },
@@ -33,48 +73,40 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
   },
   last_name: {
     type: String,
-    required: false,
+    required: true,
   },
-  dob: {
+  date_of_birth: {
+    type: Date,
+    required: true,
+  },
+  gender: {
     type: String,
     required: true,
   },
-  tech_stack: {
+  nationality: {
+    type: String,
+    required: true,
+  },
+  marital_status: {
+    type: String,
+    required: true,
+  },
+  photo: {
+    type: String,
+    required: true,
+  },
+  designation: {
     type: String,
     required: true,
   },
   joining_date: {
-    type: String,
+    type: Date,
     required: true,
   },
   ending_date: {
-    type: String,
+    type: Date,
     required: false,
     default: null,
-  },
-  pan_image: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  aadhaar_image: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  group: {
-    type: String,
-    required: true,
-  },
-  avatar: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  currently_working: {
-    type: Boolean,
-    required: true,
-    default: true,
   },
   father_name: {
     type: String,
@@ -84,24 +116,141 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
+  contact_information: {
+    email: {
+      type: String,
+      required: true,
+    },
+    phone_number: {
+      type: String,
+      required: true,
+    },
+    address: {
+      permanent: {
+        street: {
+          type: String,
+          required: true,
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        state: {
+          type: String,
+          required: true,
+        },
+        zip_code: {
+          type: String,
+          required: true,
+        },
+        country: {
+          type: String,
+          required: true,
+        },
+      },
+      current: {
+        street: {
+          type: String,
+          required: true,
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        state: {
+          type: String,
+          required: true,
+        },
+        zip_code: {
+          type: String,
+          required: true,
+        },
+        country: {
+          type: String,
+          required: true,
+        },
+      },
+    },
+    emergency_contact: {
+      name: {
+        type: String,
+        required: true,
+      },
+      relationship: {
+        type: String,
+        required: true,
+      },
+      phone_number: {
+        type: String,
+        required: true,
+      },
+    },
   },
-  tenth_certificate: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  twelfth_certificate: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  graduation_certificate: {
-    type: String,
-    required: false,
-    default: null,
+  skills_and_qualifications: {
+    educational_background: [
+      {
+        degree: {
+          type: String,
+          required: true,
+        },
+        institution: {
+          type: String,
+          required: true,
+        },
+        graduation_date: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
+    certifications: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        institution: {
+          type: String,
+          required: true,
+        },
+        date_obtained: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
+    skills: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    languages_spoken: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    work_experience: [
+      {
+        employer: {
+          type: String,
+          required: true,
+        },
+        job_title: {
+          type: String,
+          required: true,
+        },
+        start_date: {
+          type: Date,
+          required: true,
+        },
+        end_date: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
   },
 });
 
