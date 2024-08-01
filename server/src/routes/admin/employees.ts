@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { adminController } from '@controller';
 import { catchAsync } from '@utils';
 import upload from '../../middleware/multer-config'; // Update this path as necessary
+import { createDayType } from 'src/controller/employees/addDaytpe';
 
 const router = Router();
 
@@ -213,8 +214,62 @@ const router = Router();
  *       '500':
  *         description: Server error
  */
-
+/**
+ * @swagger
+ * /api/v1/admin/employees/daytype:
+ *   post:
+ *     summary: Add a new DayType.
+ *     description: Creates a new DayType record in the database.
+ *     tags:
+ *       - DayType
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Status:
+ *                 type: string
+ *                 description: The status of the day type.
+ *                 example: "Holiday"
+ *               Description:
+ *                 type: string
+ *                 description: A description of the day type.
+ *                 example: "A public holiday observed nationwide."
+ *               WorkingHours:
+ *                 type: integer
+ *                 description: The number of working hours associated with the day type.
+ *                 example: 0
+ *     responses:
+ *       '201':
+ *         description: DayType successfully created.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: "DayType created successfully."
+ *             dayType:
+ *               $ref: '#/components/schemas/DayType'
+ *       '400':
+ *         description: Bad request or validation error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: "Validation failed or missing fields."
+ *       '500':
+ *         description: Internal server error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: "Internal server error."
+ */
 router.get("/", catchAsync(adminController.employees.list));
 router.post("/upsert", upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'documents', maxCount: 10 }]), catchAsync(adminController.employees.upsert));
-
+router.post('/daytype', catchAsync(createDayType));
 export default router;

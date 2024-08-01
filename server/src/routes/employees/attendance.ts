@@ -2,7 +2,7 @@ import { Router } from "express";
 import { employeeController } from "@controller";
 import { catchAsync } from "@utils";
 
-const router = Router()
+const router = Router();
 
 /**
  * @swagger
@@ -63,7 +63,8 @@ const router = Router()
  *               type: string
  *               example: "Internal server error"
  */
-router.post("/check-in",catchAsync(employeeController.attendance.checkIn))
+router.post("/check-in", catchAsync(employeeController.attendance.checkIn));
+
 /**
  * @swagger
  * /api/v1/employees/attendance/check-out:
@@ -74,17 +75,17 @@ router.post("/check-in",catchAsync(employeeController.attendance.checkIn))
  *       - Attendance
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: body
- *         name: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             _id:
- *               type: string
- *               description: User ID of the employee.
- *               example: "609bfe2ccbc555001f3e5a6f"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 description: User ID of the employee.
+ *                 example: "609bfe2ccbc555001f3e5a6f"
  *     responses:
  *       '201':
  *         description: Successful check-out.
@@ -115,8 +116,80 @@ router.post("/check-in",catchAsync(employeeController.attendance.checkIn))
  *               type: string
  *               example: "Internal server error"
  */
+router.patch("/check-out", catchAsync(employeeController.attendance.checkOut));
 
-router.patch("/check-out",catchAsync(employeeController.attendance.checkOut))
+/**
+ * @swagger
+ * /api/v1/employees/attendance/getAttendanceById:
+ *   post:
+ *     summary: Get attendance records for a specific employee and month.
+ *     description: Retrieves attendance records for a specific employee for a given month and year.
+ *     tags:
+ *       - Attendance
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: User ID of the employee.
+ *                 example: "609bfe2ccbc555001f3e5a6f"
+ *               month:
+ *                 type: string
+ *                 description: The month for which to retrieve attendance records (1-12).
+ *                 example: "7"
+ *               year:
+ *                 type: string
+ *                 description: The year for which to retrieve attendance records.
+ *                 example: "2024"
+ *     responses:
+ *       '200':
+ *         description: Successful retrieval of attendance records.
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2023-07-05T08:30:00Z"
+ *               check_in:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2023-07-05T08:30:00Z"
+ *               check_out:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2023-07-05T17:00:00Z"
+ *               type:
+ *                 type: string
+ *                 example: "CHECKIN"
+ *               description:
+ *                 type: string
+ *                 example: ""
+ *       '400':
+ *         description: Bad request or missing parameters.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: "Missing required parameters"
+ *       '500':
+ *         description: Internal server error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *               example: "Internal server error"
+ */
+router.post("/getAttendanceById", catchAsync(employeeController.attendance.getAttendanceById));
 
-
-export default router
+export default router;
