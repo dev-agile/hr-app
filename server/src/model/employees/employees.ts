@@ -2,107 +2,108 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface IEmployee extends Document {
-  employee_id: string;
-  first_name: string;
-  last_name: string;
-  date_of_birth: Date;
-  gender: string;
-  nationality: string;
-  marital_status: string;
-  photo: string;
-  designation: string;
-  joining_date: Date;
-  ending_date: Date;
-  father_name: string;
-  mother_name: string;
-  contact_information: {
-    email: string;
-    phone_number: string;
-    address: {
-      permanent: {
-        street: string;
-        city: string;
-        state: string;
-        zip_code: string;
-        country: string;
+  employee_id?: string;
+  first_name?: string;
+  last_name?: string;
+  date_of_birth?: Date;
+  gender?: string;
+  nationality?: string;
+  marital_status?: string;
+  photo?: string;
+  designation?: string;
+  joining_date?: Date;
+  ending_date?: Date | null;
+  father_name?: string;
+  mother_name?: string;
+  contact_information?: {
+    email?: string;
+    phone_number?: string;
+    address?: {
+      permanent?: {
+        street?: string;
+        city?: string;
+        state?: string;
+        zip_code?: string;
+        country?: string;
       };
-      current: {
-        street: string;
-        city: string;
-        state: string;
-        zip_code: string;
-        country: string;
+      current?: {
+        street?: string;
+        city?: string;
+        state?: string;
+        zip_code?: string;
+        country?: string;
       };
     };
-    emergency_contact: {
-      name: string;
-      relationship: string;
-      phone_number: string;
+    emergency_contact?: {
+      name?: string;
+      relationship?: string;
+      phone_number?: string;
     };
   };
-  skills_and_qualifications: {
-    educational_background: {
-      degree: string;
-      institution: string;
-      graduation_date: Date;
+  skills_and_qualifications?: {
+    educational_background?: {
+      degree?: string;
+      institution?: string;
+      graduation_date?: Date;
     }[];
-    certifications: {
-      name: string;
-      institution: string;
-      date_obtained: Date;
+    certifications?: {
+      name?: string;
+      institution?: string;
+      date_obtained?: Date;
     }[];
-    skills: string[];
-    languages_spoken: string[];
-    work_experience: {
-      employer: string;
-      job_title: string;
-      start_date: Date;
-      end_date: Date;
+    skills?: string[];
+    languages_spoken?: string[];
+    work_experience?: {
+      employer?: string;
+      job_title?: string;
+      start_date?: Date;
+      end_date?: Date;
     }[];
   };
-  documents: string[]; // Array of document paths
+  documents?: string[]; // Array of document paths
 }
 
 const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
   employee_id: {
     type: String,
     default: uuidv4,
+    required: false,
   },
   first_name: {
     type: String,
-    required: true,
+    required: false,
   },
   last_name: {
     type: String,
-    required: true,
+    required: false,
   },
   date_of_birth: {
     type: Date,
-    required: true,
+    required: false,
   },
   gender: {
     type: String,
-    required: true,
+    required: false,
   },
   nationality: {
     type: String,
-    required: true,
+    required: false,
   },
   marital_status: {
     type: String,
-    required: true,
+    required: false,
   },
   photo: {
     type: String,
-    required: true,
+    required: false,
   },
   designation: {
     type: String,
-    required: true,
+    required: false,
   },
   joining_date: {
     type: Date,
-    required: true,
+    required: false,
   },
   ending_date: {
     type: Date,
@@ -111,79 +112,79 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
   },
   father_name: {
     type: String,
-    required: true,
+    required: false,
   },
   mother_name: {
     type: String,
-    required: true,
+    required: false,
   },
   contact_information: {
     email: {
       type: String,
-      required: true,
+      required: false,
     },
     phone_number: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       permanent: {
         street: {
           type: String,
-          required: true,
+          required: false,
         },
         city: {
           type: String,
-          required: true,
+          required: false,
         },
         state: {
           type: String,
-          required: true,
+          required: false,
         },
         zip_code: {
           type: String,
-          required: true,
+          required: false,
         },
         country: {
           type: String,
-          required: true,
+          required: false,
         },
       },
       current: {
         street: {
           type: String,
-          required: true,
+          required: false,
         },
         city: {
           type: String,
-          required: true,
+          required: false,
         },
         state: {
           type: String,
-          required: true,
+          required: false,
         },
         zip_code: {
           type: String,
-          required: true,
+          required: false,
         },
         country: {
           type: String,
-          required: true,
+          required: false,
         },
       },
     },
     emergency_contact: {
       name: {
         type: String,
-        required: true,
+        required: false,
       },
       relationship: {
         type: String,
-        required: true,
+        required: false,
       },
       phone_number: {
         type: String,
-        required: true,
+        required: false,
       },
     },
   },
@@ -192,15 +193,15 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
       {
         degree: {
           type: String,
-          required: true,
+          required: false,
         },
         institution: {
           type: String,
-          required: true,
+          required: false,
         },
         graduation_date: {
           type: Date,
-          required: true,
+          required: false,
         },
       },
     ],
@@ -208,47 +209,47 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
       {
         name: {
           type: String,
-          required: true,
+          required: false,
         },
         institution: {
           type: String,
-          required: true,
+          required: false,
         },
         date_obtained: {
           type: Date,
-          required: true,
+          required: false,
         },
       },
     ],
     skills: [
       {
         type: String,
-        required: true,
+        required: false,
       },
     ],
     languages_spoken: [
       {
         type: String,
-        required: true,
+        required: false,
       },
     ],
     work_experience: [
       {
         employer: {
           type: String,
-          required: true,
+          required: false,
         },
         job_title: {
           type: String,
-          required: true,
+          required: false,
         },
         start_date: {
           type: Date,
-          required: true,
+          required: false,
         },
         end_date: {
           type: Date,
-          required: true,
+          required: false,
         },
       },
     ],
@@ -256,7 +257,7 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
   documents: [
     {
       type: String,
-      required: true,
+      required: false,
     },
   ], // Array of document paths
 });
