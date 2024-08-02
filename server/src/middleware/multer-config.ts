@@ -12,29 +12,35 @@ if (!fs.existsSync(baseUploadDir)) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Get employee name from the request body, if available
-    const employeeName = req.body.first_name || 'default';
-    const sanitizedEmployeeName = employeeName.replace(/[^a-zA-Z0-9]/g, '_'); // Sanitize name
-
-    // Define the directory for the employee
-    const employeeDir = path.join(baseUploadDir, sanitizedEmployeeName);
-    const documentsDir = path.join(employeeDir, 'documents');
+    // Define directories for different field names
+    const attendanceDir = path.join(baseUploadDir, 'attendance');
+    const photoDir = path.join(baseUploadDir, 'photos');
+    const documentsDir = path.join(baseUploadDir, 'documents');
 
     // Create directories if they do not exist
-    if (!fs.existsSync(employeeDir)) {
-      fs.mkdirSync(employeeDir, { recursive: true });
+    if (!fs.existsSync(attendanceDir)) {
+      fs.mkdirSync(attendanceDir, { recursive: true });
+    }
+    if (!fs.existsSync(photoDir)) {
+      fs.mkdirSync(photoDir, { recursive: true });
     }
     if (!fs.existsSync(documentsDir)) {
       fs.mkdirSync(documentsDir, { recursive: true });
     }
 
     // Decide the directory based on the field name
-    if (file.fieldname === 'photo') {
-      cb(null, employeeDir);
-    } else if (file.fieldname === 'documents') {
-      cb(null, documentsDir); // Save documents in the documents subdirectory
-    } else {
-      cb(new Error('Invalid field name'), '');
+    switch (file.fieldname) {
+      case 'attendance':
+        cb(null, attendanceDir);
+        break;
+      case 'photo':
+        cb(null, photoDir);
+        break;
+      case 'documents':
+        cb(null, documentsDir);
+        break;
+      default:
+        cb(new Error('Invalid field name'), '');
     }
   },
   filename: (req, file, cb) => {
@@ -48,7 +54,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx/; // Add any additional document types here
+    const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx|csv/; // Add any additional document types here
     const mimeType = allowedTypes.test(file.mimetype);
     const extName = allowedTypes.test(path.extname(file.originalname).toLowerCase());
 

@@ -3,6 +3,7 @@ import { sendResponse } from '@utils';
 import { messages, status } from '@constants';
 import moment from 'moment';
 import { Attendance } from 'src/model/employees';
+import  Holiday  from 'src/model/holiday/holiday';
 
 const getAttendanceById = async (request: Request, response: Response) => {
   const { id, month, year } = request.body;
@@ -23,32 +24,43 @@ const getAttendanceById = async (request: Request, response: Response) => {
 
     const attendanceEvents = await Attendance.find({
       user_id: id,
-      $expr: {
-        $and: [
-          { $gte: [{ $dateFromString: { dateString: '$date', format: '%d-%m-%Y' } }, startDate.toDate()] },
-          { $lte: [{ $dateFromString: { dateString: '$date', format: '%d-%m-%Y' } }, endDate.toDate()] },
-        ],
-      },
+      date: {
+        $gte: startDate.toDate(),
+        $lte: endDate.toDate()
+      }
     }).sort({ date: 1 });
+
+    const holidays = await Holiday.find({
+      date: {
+        $gte: startDate.format('YYYY-MM-DD'),
+        $lte: endDate.format('YYYY-MM-DD')
+      }
+    });
 
     // Generate an array for the month
     const daysInMonth = endDate.date(); // Number of days in the month
     const attendanceArray = [];
 
     for (let i = 1; i <= daysInMonth; i++) {
-      const currentDate = moment(startDate).date(i).format('DD-MM-YYYY');
-      const dayOfWeek = moment(currentDate, 'DD-MM-YYYY').format('dddd');
+      const currentDate = moment(startDate).date(i).format('YYYY-MM-DD');
+      const dayOfWeek = moment(currentDate, 'YYYY-MM-DD').format('dddd');
       const isWeekend = dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';
 
-      const attendanceRecord = attendanceEvents.find((event) => moment(event.date, 'DD-MM-YYYY').format('DD-MM-YYYY') === currentDate);
+      const attendanceRecord = attendanceEvents.find((event) => moment(event.date).format('YYYY-MM-DD') === currentDate);
+      const holidayRecord = holidays.find((holiday) => moment(holiday.date).format('YYYY-MM-DD') === currentDate);
+
+      const dayType = holidayRecord ? holidayRecord.name : (isWeekend ? 'Weekends' : 'Working');
+      const workingHours = attendanceRecord
+        ? attendanceRecord.working_hours
+        : (holidayRecord ? 0 : (isWeekend ? 0 : 8));
 
       attendanceArray.push({
         date: currentDate,
         checkIn: attendanceRecord ? attendanceRecord.check_in : null,
         checkOut: attendanceRecord ? attendanceRecord.check_out : null,
         day: dayOfWeek, // Get day name
-        dayType: isWeekend ? 'Weekends' : 'Working',
-        workingHours: attendanceRecord ? attendanceRecord.working_hours : (isWeekend ? 0 : 8), // Use attendance working hours if available
+        dayType: dayType,
+        workingHours: workingHours, // Use attendance working hours if available
       });
     }
 

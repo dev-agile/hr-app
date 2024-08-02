@@ -61,6 +61,7 @@ export interface IEmployee extends Document {
     }[];
   };
   documents?: string[]; // Array of document paths
+  isActive?: boolean; // New field
 }
 
 const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
@@ -260,6 +261,11 @@ const employeeSchema: Schema<IEmployee> = new mongoose.Schema({
       required: false,
     },
   ], // Array of document paths
+  isActive: {
+    type: Boolean,
+    default: true,
+    required: true,
+  },
 });
 
 const Employee = mongoose.model<IEmployee>('Employee', employeeSchema);

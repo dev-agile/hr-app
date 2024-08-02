@@ -23,6 +23,9 @@
       "@enums": ["src/enums"]
     }
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "src/types/express/index.d.ts"
+  ],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
