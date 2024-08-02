@@ -25,6 +25,13 @@ const messages = {
   attendance_checked_found: "Attendance already checked in today",
   attendance_checked_out_found: "Attendance already checked out today",
   attendance_check_not_found: "Attendance not found for today",
+  attendance_updated: "Attendance updated successfully",
+  attendance_not_found: "Attendance record not found",
+  unauthorized_edit: "You are not authorized to edit this attendance record",
+  attendance_update_pending: "Attendance update is pending approval",
+  attendance_approved: "Attendance changes approved",
+  attendance_rejected: "Attendance changes rejected",
+  no_pending_changes: "No pending changes to approve",
 };
 
 export default messages;

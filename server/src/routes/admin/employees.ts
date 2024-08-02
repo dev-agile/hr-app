@@ -3,6 +3,7 @@ import { adminController } from '@controller';
 import { catchAsync } from '@utils';
 import upload from '../../middleware/multer-config'; // Update this path as necessary
 import { createDayType } from 'src/controller/employees/addDaytpe';
+import { approveAttendance, deleteEmployee } from 'src/controller/admin/employees';
 
 const router = Router();
 
@@ -317,7 +318,225 @@ const router = Router();
  *               type: string
  *               example: "Internal server error."
  */
+/**
+ * @swagger
+ * /api/v1/admin/employees/delete:
+ *   delete:
+ *     summary: Delete an employee
+ *     description: Deletes an employee record based on the employee_id provided in the request body.
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               employee_id:
+ *                 type: string
+ *                 description: The unique identifier of the employee to delete
+ *                 example: "609bfe2ccbc555001f3e5a6f"
+ *     responses:
+ *       '200':
+ *         description: Employee successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employee deleted successfully
+ *       '400':
+ *         description: Bad request - employee_id not provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employee ID is required
+ *       '404':
+ *         description: Employee not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employee not found
+ *       '500':
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/v1/admin/employees/deactivate:
+ *   patch:
+ *     summary: Deactivate an employee
+ *     description: Deactivates an employee record based on the employee_id provided in the request body.
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               employee_id:
+ *                 type: string
+ *                 description: The unique identifier of the employee to deactivate
+ *                 example: "609bfe2ccbc555001f3e5a6f"
+ *     responses:
+ *       '200':
+ *         description: Employee successfully deactivated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employee deactivated successfully
+ *       '400':
+ *         description: Bad request - employee_id not provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employee ID is required
+ *       '404':
+ *         description: Employee not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employee not found
+ *       '500':
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+/**
+ * @swagger
+ * /api/v1/admin/employees/inactive:
+ *   get:
+ *     summary: Get a paginated list of inactive employees
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: The page number to retrieve.
+ *       - in: query
+ *         name: page_size
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: The number of records per page.
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Employee'
+ *                 totalCount:
+ *                   type: integer
+ *                   example: 10
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 2
+ *       '500':
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+/**
+ * @swagger
+ * /api/v1/admin/employees/approve:
+ *   post:
+ *     summary: Approve or reject attendance changes
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               attendance_id:
+ *                 type: string
+ *                 description: The ID of the attendance record to approve
+ *               approve:
+ *                 type: boolean
+ *                 description: True to approve, false to reject
+ *     responses:
+ *       '200':
+ *         description: Attendance changes approved or rejected
+ *       '400':
+ *         description: Bad request
+ *       '404':
+ *         description: Attendance not found
+ *       '500':
+ *         description: Internal server error
+ */
+router.post('/approve', catchAsync(approveAttendance));
+
+router.get("/inactive", catchAsync(adminController.employees.listInactive));
 router.get("/", catchAsync(adminController.employees.list));
 router.post("/upsert", upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'documents', maxCount: 10 }]), catchAsync(adminController.employees.upsert));
 router.post('/daytype', catchAsync(createDayType));
+router.delete('/delete', catchAsync(adminController.employees.deleteEmployee));
+router.patch('/deactivate', catchAsync(adminController.employees.deactivateEmployee));
 export default router;
