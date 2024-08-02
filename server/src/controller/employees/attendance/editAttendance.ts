@@ -41,17 +41,18 @@ export const editAttendance = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    // Only update fields that are provided
-    if (user_id) attendance.user_id = user_id;
-    if (date) attendance.date = date;
-    if (check_in) attendance.check_in = check_in;
-    if (check_out) attendance.check_out = check_out;
-    if (attendanceStatus) attendance.status = attendanceStatus;
-    if (working_hours) attendance.working_hours = working_hours;
+    // Store changes in pending_changes
+    attendance.pending_changes = {
+      check_in: check_in || attendance.check_in,
+      check_out: check_out || attendance.check_out,
+      status: attendanceStatus || attendance.status,
+      working_hours: working_hours || attendance.working_hours,
+    };
+    attendance.approval_status = 'pending';
 
     await attendance.save();
 
-    sendResponse(res, status.ok, messages.attendance_updated, attendance);
+    sendResponse(res, status.ok, messages.attendance_update_pending, attendance);
   } catch (error) {
     console.error('Error editing attendance:', error);
     sendResponse(res, status.internal_server_error, messages.internal_server_error, null);

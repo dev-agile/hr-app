@@ -3,7 +3,7 @@ import { adminController } from '@controller';
 import { catchAsync } from '@utils';
 import upload from '../../middleware/multer-config'; // Update this path as necessary
 import { createDayType } from 'src/controller/employees/addDaytpe';
-import { deleteEmployee } from 'src/controller/admin/employees';
+import { approveAttendance, deleteEmployee } from 'src/controller/admin/employees';
 
 const router = Router();
 
@@ -499,6 +499,39 @@ const router = Router();
  *                   type: string
  *                   example: Internal server error
  */
+/**
+ * @swagger
+ * /api/v1/admin/employees/approve:
+ *   post:
+ *     summary: Approve or reject attendance changes
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               attendance_id:
+ *                 type: string
+ *                 description: The ID of the attendance record to approve
+ *               approve:
+ *                 type: boolean
+ *                 description: True to approve, false to reject
+ *     responses:
+ *       '200':
+ *         description: Attendance changes approved or rejected
+ *       '400':
+ *         description: Bad request
+ *       '404':
+ *         description: Attendance not found
+ *       '500':
+ *         description: Internal server error
+ */
+router.post('/approve', catchAsync(approveAttendance));
 
 router.get("/inactive", catchAsync(adminController.employees.listInactive));
 router.get("/", catchAsync(adminController.employees.list));

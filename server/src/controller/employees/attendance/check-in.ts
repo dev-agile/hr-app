@@ -31,7 +31,7 @@ const checkIn = async (req: Request, res: Response) => {
       user_id: userId,
       date,
       check_in: formattedTime,
-      status: AttendanceStatus.CheckOut,
+      status: AttendanceStatus.Present,
     };
 
     const createdAttendance = await employeeModel.Attendance.create(newAttendance);
