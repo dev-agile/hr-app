@@ -226,8 +226,7 @@ router.post('/upload-attendance', upload.single('attendance'), catchAsync(upload
  * @swagger
  * /api/v1/employees/attendance/edit:
  *   put:
- *     summary: Edit an attendance record
- *     description: Allows an admin to edit any employee's attendance, while non-admin employees can only edit their own.
+ *     summary: Edit an attendance record (requires admin approval)
  *     tags:
  *       - Admin
  *     security:
@@ -256,6 +255,9 @@ router.post('/upload-attendance', upload.single('attendance'), catchAsync(upload
  *                 type: string
  *               working_hours:
  *                 type: string
+ *               reason:
+ *                 type: string
+ *                 description: The reason for the attendance change
  *     responses:
  *       '200':
  *         description: Attendance successfully updated

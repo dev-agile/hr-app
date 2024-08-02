@@ -23,11 +23,12 @@ export const editAttendance = async (req: Request, res: Response): Promise<void>
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
     const { userId, role } = decoded;
-    const { attendance_id, user_id, date, check_in, check_out, status: attendanceStatus, working_hours } = req.body;
+    const { attendance_id, user_id, date, check_in, check_out, status: attendanceStatus, working_hours, reason } = req.body;
 
     console.log('Decoded token:', decoded);
     console.log('Attendance ID:', attendance_id);
     console.log('User ID:', user_id);
+    console.log("u",userId);
 
     if (role !== 'ADMIN' && userId !== user_id) {
       sendResponse(res, status.forbidden, messages.forbidden, null);
@@ -47,6 +48,7 @@ export const editAttendance = async (req: Request, res: Response): Promise<void>
       check_out: check_out || attendance.check_out,
       status: attendanceStatus || attendance.status,
       working_hours: working_hours || attendance.working_hours,
+      reason: reason || '',
     };
     attendance.approval_status = 'pending';
 

@@ -12,6 +12,7 @@ interface IAttendance extends Document {
     check_out?: string;
     status?: string;
     working_hours?: string;
+    reason?: string;
   };
   approval_status: 'approved' | 'pending' | 'rejected';
 }
@@ -28,6 +29,7 @@ const AttendanceSchema = new Schema<IAttendance>({
     check_out: { type: String },
     status: { type: String },
     working_hours: { type: String },
+    reason: { type: String },
   },
   approval_status: { type: String, enum: ['approved', 'pending', 'rejected'], default: 'approved' },
 });

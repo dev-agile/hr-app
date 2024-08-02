@@ -9,7 +9,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     console.log(email_address, password);
 
     const user = await UsersRole.findOne({ email_address: email_address });
-    if (!user) {
+    const employee = await employeeModel.Employee.findOne({ 'contact_information.email': email_address });
+
+    if (!employee || !user) {
       throw new CustomError(status.not_found, messages.not_found);
     }
 
@@ -18,8 +20,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       return sendResponse(res, status.unauthorized, messages.unauthorized, null);
     }
 
-    const accessToken = tokenGenerator.access(user.user_id, user.role);
-    const refreshToken = tokenGenerator.refresh(user.user_id, user.role);
+    // Ensure employee_id is a string or use a fallback
+    const employeeId = employee.employee_id?.toString() || "";
+
+    const accessToken = tokenGenerator.access(employeeId, user.role);
+    const refreshToken = tokenGenerator.refresh(employeeId, user.role);
 
     sendResponse(res, status.ok, messages.success, {
       access_token: accessToken,
