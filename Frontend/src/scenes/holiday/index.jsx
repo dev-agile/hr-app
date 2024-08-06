@@ -22,7 +22,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { Add, Edit, Delete } from "@mui/icons-material";
+import { Add, Edit, Delete, Search } from "@mui/icons-material";
 import useHolidayStore from "../../store/holidayStore"; // Import the Zustand store
 
 const Holiday = () => {
@@ -30,6 +30,8 @@ const Holiday = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentHoliday, setCurrentHoliday] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
 
   useEffect(() => {
     fetchHolidays();
@@ -70,14 +72,52 @@ const Holiday = () => {
     setCurrentHoliday({});
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedHolidays = holidays
+    .filter((holiday) =>
+      holiday.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortConfig.key) {
+        if (sortConfig.direction === "ascending") {
+          return a[sortConfig.key] > b[sortConfig.key] ? 1 : -1;
+        } else {
+          return a[sortConfig.key] < b[sortConfig.key] ? 1 : -1;
+        }
+      }
+      return 0;
+    });
+
   return (
     <Box p={3}>
       <Typography variant="h4" gutterBottom>
         Holiday Management
       </Typography>
-      <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAddClick}>
-        Add Holiday
-      </Button>
+      <Box display="flex" justifyContent="space-between" mb={2}>
+        <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAddClick}>
+          Add Holiday
+        </Button>
+        <TextField
+          variant="outlined"
+          placeholder="Search by name"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: <Search />,
+          }}
+        />
+      </Box>
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
           <CircularProgress />
@@ -87,15 +127,23 @@ const Holiday = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Type</TableCell>
+                <TableCell onClick={() => handleSort("name")}>
+                  Name {sortConfig.key === "name" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
+                </TableCell>
+                <TableCell onClick={() => handleSort("date")}>
+                  Date {sortConfig.key === "date" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
+                </TableCell>
+                <TableCell onClick={() => handleSort("description")}>
+                  Description {sortConfig.key === "description" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
+                </TableCell>
+                <TableCell onClick={() => handleSort("type")}>
+                  Type {sortConfig.key === "type" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
+                </TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {holidays.map((holiday) => (
+              {sortedHolidays.map((holiday) => (
                 <TableRow key={holiday._id}>
                   <TableCell>{holiday.name}</TableCell>
                   <TableCell>{holiday.date}</TableCell>
