@@ -86,7 +86,7 @@ const Holiday = () => {
 
   const sortedHolidays = holidays
     .filter((holiday) =>
-      holiday.name.toLowerCase().includes(searchQuery.toLowerCase())
+      holiday.name?.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       if (sortConfig.key) {
@@ -127,16 +127,16 @@ const Holiday = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell onClick={() => handleSort("name")}>
+                <TableCell onClick={() => handleSort("name")} sx={{cursor:'pointer'}}>
                   Name {sortConfig.key === "name" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
-                <TableCell onClick={() => handleSort("date")}>
+                <TableCell onClick={() => handleSort("date")} sx={{cursor:'pointer'}}>
                   Date {sortConfig.key === "date" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
-                <TableCell onClick={() => handleSort("description")}>
+                <TableCell onClick={() => handleSort("description")} sx={{cursor:'pointer'}}>
                   Description {sortConfig.key === "description" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
-                <TableCell onClick={() => handleSort("type")}>
+                <TableCell onClick={() => handleSort("type")} sx={{cursor:'pointer'}}>
                   Type {sortConfig.key === "type" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
                 <TableCell>Actions</TableCell>
@@ -197,7 +197,7 @@ const Holiday = () => {
               onChange={(e) => setCurrentHoliday({ ...currentHoliday, type: e.target.value })}
             >
               <MenuItem value="Public">Public</MenuItem>
-              <MenuItem value="Private">Private</MenuItem>
+              <MenuItem value="Company">Company</MenuItem>
               <MenuItem value="Optional">Optional</MenuItem>
             </Select>
           </FormControl>
