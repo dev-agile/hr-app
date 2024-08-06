@@ -16,7 +16,8 @@ import { ColorModeContext, useMode } from "../theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Sidebar from "../scenes/global/Sidebar";
 import Topbar from "../scenes/global/Topbar";
-import Holiday from "../scenes/holiday"
+import Holiday from "../scenes/holiday";
+import { ToastProvider } from "../components/ToastNotification";
 
 const ProtectedRoute = ({ element }) => {
   const [theme, colorMode] = useMode();
@@ -31,14 +32,16 @@ const ProtectedRoute = ({ element }) => {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app">
-          <Sidebar isSidebar={isSidebar} />
-          <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
-            {element}
-          </main>
-        </div>
+        <ToastProvider>
+          <CssBaseline />
+          <div className="app">
+            <Sidebar isSidebar={isSidebar} />
+            <main className="content">
+              <Topbar setIsSidebar={setIsSidebar} />
+              {element}
+            </main>
+          </div>
+        </ToastProvider>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

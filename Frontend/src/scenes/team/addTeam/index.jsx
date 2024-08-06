@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@mui/material";
+import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import Header from "../../../components/Header";
 import React from "react";
 import AddBasicInformation from "./AddBasicInformation";
@@ -18,14 +11,26 @@ const steps = [
   "Add Documents",
 ];
 
-const InformationScreen = ({ activeStep }) => {
+const InformationScreen = ({ activeStep, setActiveStep, handleBack }) => {
   switch (activeStep) {
     case 0:
-      return <AddBasicInformation />;
+      return <AddBasicInformation setActiveStep={setActiveStep} />;
     case 1:
-      return <AddQualifications />;
+      return (
+        <AddQualifications
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          handleBack={handleBack}
+        />
+      );
     case 2:
-      return <Documents />;
+      return (
+        <Documents
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          handleBack={handleBack}
+        />
+      );
     default:
       return <div>Invalid step: {activeStep}</div>;
   }
@@ -34,16 +39,8 @@ const InformationScreen = ({ activeStep }) => {
 const AddTeam = () => {
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
   };
 
   return (
@@ -57,42 +54,19 @@ const AddTeam = () => {
           const stepProps = {};
           const labelProps = {};
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={index} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <InformationScreen activeStep={activeStep} />
-          <Box sx={{ display: "flex", flexDirection: "row", py: 2 }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-              color="inherit"
-              variant="contained"
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleNext} color="secondary" variant="contained">
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-          </Box>
-        </React.Fragment>
-      )}
+      <React.Fragment>
+        <InformationScreen
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          handleBack={handleBack}
+        />
+      </React.Fragment>
     </Box>
   );
 };

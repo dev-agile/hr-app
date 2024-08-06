@@ -57,6 +57,18 @@ function ContactInformation({
         }
         sx={{ gridColumn: "span 2" }}
       />
+      <TextField
+        fullWidth
+        type="tel"
+        label="Password"
+        onBlur={handleBlur}
+        onChange={handleChange}
+        value={values.password}
+        name="password"
+        error={!!touched.password && !!errors.password}
+        helperText={touched.password && errors.password}
+        sx={{ gridColumn: "span 2" }}
+      />
       <Typography variant="h3" sx={{ gridColumn: "span 4" }}>
         Permanent Address
       </Typography>

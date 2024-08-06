@@ -8,16 +8,22 @@ import EmergencyContact from "./components/EmergencyContact";
 import CurrentAddress from "./components/CurrentAddress";
 import ContactInformation from "./components/ContactInformation";
 
-const AddBasicInformation = () => {
+const AddBasicInformation = ({ setActiveStep }) => {
   const [avatarURL, setAvatarURL] = React.useState("");
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const fileUploadRef = React.useRef();
-
+  const addTeamDetails = JSON.parse(localStorage.getItem("addTeamDetails"));
+  const initialValues = addTeamDetails || basicInfoInitialValues;
   const handleFormSubmit = (values) => {
-    console.log({
+    const payload = {
       ...values,
       photo: avatarURL,
-    });
+      joining_date: values.joining_date || "",
+      ending_date: values.ending_date || "",
+      date_of_birth: values.dob || "",
+    };
+    localStorage.setItem("addTeamDetails", JSON.stringify(payload));
+    setActiveStep((prevStep) => prevStep + 1);
   };
 
   const handleImageUpload = (event) => {
@@ -44,7 +50,7 @@ const AddBasicInformation = () => {
     <Box m="20px">
       <Formik
         onSubmit={handleFormSubmit}
-        initialValues={basicInfoInitialValues}
+        initialValues={initialValues}
         validationSchema={basicInfoSchema}
       >
         {({
@@ -242,19 +248,6 @@ const AddBasicInformation = () => {
                 helperText={touched.marital_status && errors.marital_status}
                 sx={{ gridColumn: "span 2" }}
               />
-              <TextField
-                fullWidth
-                type="text"
-                label="Tech Stack"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.tech_stack}
-                name="tech_stack"
-                error={!!touched.tech_stack && !!errors.tech_stack}
-                helperText={touched.tech_stack && errors.tech_stack}
-                sx={{ gridColumn: "span 4" }}
-              />
-
               <ContactInformation
                 values={values}
                 touched={touched}
@@ -278,8 +271,8 @@ const AddBasicInformation = () => {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New User
+              <Button type="submit" color="primary" variant="contained">
+                Next
               </Button>
             </Box>
           </form>

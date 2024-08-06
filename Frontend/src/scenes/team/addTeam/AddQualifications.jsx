@@ -4,9 +4,20 @@ import React from "react";
 import { addQualificationValidationSchema } from "../../../utils/schema";
 import { addQualificationsInitialValues } from "../../../utils/formInitialValues";
 
-const AddQualifications = () => {
+const AddQualifications = ({ activeStep, setActiveStep, handleBack }) => {
+  const addTeamDetails = JSON.parse(localStorage.getItem("addTeamDetails"));
+  const initialValues = addTeamDetails.skills_and_qualifications || addQualificationsInitialValues;
   const handleSubmit = (values) => {
-    console.log("Submitted values:", values);
+    localStorage.setItem(
+      "addTeamDetails",
+      JSON.stringify({
+        ...addTeamDetails,
+        skills_and_qualifications: {
+          ...values,
+        },
+      })
+    );
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   return (
@@ -15,7 +26,7 @@ const AddQualifications = () => {
         Educational Background
       </Typography>
       <Formik
-        initialValues={addQualificationsInitialValues}
+        initialValues={initialValues}
         validationSchema={addQualificationValidationSchema}
         onSubmit={handleSubmit}
       >
@@ -279,7 +290,7 @@ const AddQualifications = () => {
                         variant="contained"
                         disabled={(values?.skills?.length ?? 0) < 2}
                         onClick={() => remove(index)}
-                        sx={{ mt: 2, width: 80, gridColumn: "span 1" }}
+                        sx={{ mt: 2, width: 80, height: 35, gridColumn: "span 1" }}
                       >
                         Remove
                       </Button>
@@ -336,7 +347,7 @@ const AddQualifications = () => {
                         variant="contained"
                         disabled={(values?.languages_spoken?.length ?? 0) < 2}
                         onClick={() => remove(index)}
-                        sx={{ mt: 2, width: 80, gridColumn: "span 1" }}
+                        sx={{ mt: 2, width: 80, height: 35, gridColumn: "span 1" }}
                       >
                         Remove
                       </Button>
@@ -453,7 +464,7 @@ const AddQualifications = () => {
                         variant="contained"
                         disabled={(values?.work_experience?.length ?? 0) < 2}
                         onClick={() => remove(index)}
-                        sx={{ mt: 2, width: 80, gridColumn: "span 1" }}
+                        sx={{ mt: 2, width: 80, height: 35, gridColumn: "span 1" }}
                       >
                         Remove
                       </Button>
@@ -478,14 +489,26 @@ const AddQualifications = () => {
                 </Box>
               )}
             />
-            <Button
-              type="submit"
-              color="primary"
-              variant="contained"
-              sx={{ mt: 2 }}
-            >
-              Submit
-            </Button>
+            <Box sx={{ display: "flex", flexDirection: "row", py: 2 }}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mt: 2 }}
+                color="inherit"
+                variant="contained"
+              >
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                sx={{ mt: 2 }}
+              >
+                Next
+              </Button>
+            </Box>
           </Form>
         )}
       </Formik>

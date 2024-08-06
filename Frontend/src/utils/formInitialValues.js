@@ -1,4 +1,5 @@
 export const basicInfoInitialValues = {
+  employee_id: "",
   firstName: "",
   lastName: "",
   designation: "",
@@ -10,8 +11,8 @@ export const basicInfoInitialValues = {
   dob: "",
   nationality: "",
   marital_status: "",
-  tech_stack: "",
   photo: "",
+  password: "",
   contact_information: {
     email: "",
     phone_number: "",
@@ -40,28 +41,28 @@ export const basicInfoInitialValues = {
 };
 
 export const addQualificationsInitialValues = {
-    educationalBackground: [
-      {
-        degree: "",
-        institution: "",
-        graduation_date: "",
-      },
-    ],
-    certifications: [
-      {
-        name: "",
-        institution: "",
-        date_obtained: "",
-      },
-    ],
-    skills: [""],
-    languages_spoken: [""],
-    work_experience: [
-      {
-        employer: "",
-        job_title: "",
-        start_date: "",
-        end_date: "",
-      },
-    ],
-  };
+  educationalBackground: [
+    {
+      degree: "",
+      institution: "",
+      graduation_date: "",
+    },
+  ],
+  certifications: [
+    {
+      name: "",
+      institution: "",
+      date_obtained: "",
+    },
+  ],
+  skills: [""],
+  languages_spoken: [""],
+  work_experience: [
+    {
+      employer: "",
+      job_title: "",
+      start_date: "",
+      end_date: "",
+    },
+  ],
+};

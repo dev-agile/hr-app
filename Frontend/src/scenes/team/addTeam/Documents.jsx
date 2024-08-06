@@ -8,28 +8,69 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Form, FieldArray, Formik } from "formik";
-import * as yup from "yup";
-
-const validationSchema = yup.object({
-  documents: yup.array().of(
-    yup.string().required("File path is required")
-  ),
-});
+import { documentValidationSchema } from "../../../utils/schema";
+import axiosInstance from "../../../utils/axiosInstance";
+import { useToast } from "../../../components/ToastNotification";
 
 const initialValues = {
   documents: ["", ""],
 };
 
-const Documents = () => {
-  const handleSubmit = (values) => {
-    console.log("Submitted values:", values.documents);
+const Documents = ({ activeStep, handleBack }) => {
+  const { showSuccess } = useToast();
+  const addTeamDetails = JSON.parse(localStorage.getItem("addTeamDetails"));
+
+  const handleSubmit = async (values) => {
+    const payload = {
+      ...addTeamDetails,
+      ...values,
+    };
+
+    const form = new FormData();
+    for (const key in payload) {
+      if (Array.isArray(payload[key])) {
+        payload[key].forEach((item, index) => {
+          if (key === "documents") {
+            form.append(key, JSON.stringify(payload[key]));
+          } else {
+            if (item instanceof File) {
+              form.append(`${key}[${index}]`, item);
+            } else if (typeof item === "string" && item.startsWith("blob:")) {
+              form.append(`${key}[${index}]`, item);
+            }
+          }
+        });
+      } else if (
+        key === "contact_information" ||
+        key === "skills_and_qualifications"
+      ) {
+        form.append(key, JSON.stringify(payload[key]));
+      } else {
+        form.append(key, payload[key]);
+      }
+    }
+    try {
+      const response = await axiosInstance.post(
+        "/admin/employees/upsert",
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      showSuccess(response.data.message);
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
     <Box m="20px">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={documentValidationSchema}
         onSubmit={handleSubmit}
       >
         {({ values, setFieldValue, errors, touched }) => (
@@ -60,8 +101,9 @@ const Documents = () => {
                             inputProps={{ accept: ".pdf,.jpg,.png" }}
                             onChange={(event) => {
                               const file = event.currentTarget.files[0];
-                              const filePath = file ? file.name : "";
-                              setFieldValue(`documents.${index}`, filePath);
+                              const cachedURL = URL.createObjectURL(file);
+
+                              setFieldValue(`documents.${index}`, cachedURL);
                             }}
                           />
                           <FormHelperText
@@ -89,7 +131,7 @@ const Documents = () => {
                     type="button"
                     variant="contained"
                     color="primary"
-                    onClick={() => push("")} // Add an empty string to the array
+                    onClick={() => push("")}
                   >
                     Add Document
                   </Button>
@@ -97,14 +139,26 @@ const Documents = () => {
               )}
             />
 
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              Submit
-            </Button>
+            <Box sx={{ display: "flex", flexDirection: "row", py: 2 }}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mt: 2 }}
+                color="inherit"
+                variant="contained"
+              >
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                sx={{ mt: 2 }}
+              >
+                Submit
+              </Button>
+            </Box>
           </Form>
         )}
       </Formik>
