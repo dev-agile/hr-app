@@ -16,7 +16,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -139,21 +139,21 @@ const Sidebar = () => {
                 to="/team"
                 icon={<PeopleOutlinedIcon />}
               />
-              <Box component={'div'} ml={2}>
-              <Item
-                title="Add Team"
-                to="/team/addTeam"
-                icon={<GroupAddIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="View Team"
-                to="/team/viewTeam"
-                icon={<PeopleOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
+              <Box component={"div"} ml={2}>
+                <Item
+                  title="Add Team"
+                  to="/team/addTeam"
+                  icon={<GroupAddIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="View Team"
+                  to="/team/viewTeam"
+                  icon={<PeopleOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </Box>
             </Box>
             <Item
@@ -181,6 +181,13 @@ const Sidebar = () => {
             <Item
               title="Profile Form"
               to="/form"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Holiday"
+              to="/holiday"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

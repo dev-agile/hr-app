@@ -16,6 +16,7 @@ import { ColorModeContext, useMode } from "../theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Sidebar from "../scenes/global/Sidebar";
 import Topbar from "../scenes/global/Topbar";
+import Holiday from "../scenes/holiday"
 
 const ProtectedRoute = ({ element }) => {
   const [theme, colorMode] = useMode();
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
   {
     path: "/geography",
     element: <ProtectedRoute element={<Geography />} />,
+  },
+  {
+    path: "/holiday",
+    element: <ProtectedRoute element={<Holiday />} />,
   },
 ]);
 
