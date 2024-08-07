@@ -23,6 +23,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { Add, Edit, Delete, Search } from "@mui/icons-material";
+import { toast } from "react-toastify";
 import useHolidayStore from "../../store/holidayStore"; // Import the Zustand store
 
 const Holiday = () => {
@@ -50,7 +51,12 @@ const Holiday = () => {
   };
 
   const handleDeleteClick = async (holidayId) => {
-    await deleteHoliday(holidayId);
+    try {
+      await deleteHoliday(holidayId);
+      toast.success("Holiday deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete holiday");
+    }
   };
 
   const handleDialogClose = () => {
@@ -59,17 +65,23 @@ const Holiday = () => {
   };
 
   const handleDialogSubmit = async () => {
-    if (isEditMode) {
-      await updateHoliday(currentHoliday);
-    } else {
-      await addHoliday({
-        ...currentHoliday,
-        createdBy: 0,
-        updatedBy: 0,
-      });
+    try {
+      if (isEditMode) {
+        await updateHoliday(currentHoliday);
+        toast.success("Holiday updated successfully");
+      } else {
+        await addHoliday({
+          ...currentHoliday,
+          createdBy: 0,
+          updatedBy: 0,
+        });
+        toast.success("Holiday added successfully");
+      }
+      setOpenDialog(false);
+      setCurrentHoliday({});
+    } catch (error) {
+      toast.error("Failed to save holiday");
     }
-    setOpenDialog(false);
-    setCurrentHoliday({});
   };
 
   const handleSearchChange = (event) => {
@@ -127,16 +139,16 @@ const Holiday = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell onClick={() => handleSort("name")} sx={{cursor:'pointer'}}>
+                <TableCell onClick={() => handleSort("name")} sx={{ cursor: 'pointer' }}>
                   Name {sortConfig.key === "name" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
-                <TableCell onClick={() => handleSort("date")} sx={{cursor:'pointer'}}>
+                <TableCell onClick={() => handleSort("date")} sx={{ cursor: 'pointer' }}>
                   Date {sortConfig.key === "date" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
-                <TableCell onClick={() => handleSort("description")} sx={{cursor:'pointer'}}>
+                <TableCell onClick={() => handleSort("description")} sx={{ cursor: 'pointer' }}>
                   Description {sortConfig.key === "description" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
-                <TableCell onClick={() => handleSort("type")} sx={{cursor:'pointer'}}>
+                <TableCell onClick={() => handleSort("type")} sx={{ cursor: 'pointer' }}>
                   Type {sortConfig.key === "type" ? (sortConfig.direction === "ascending" ? "↑" : "↓") : ""}
                 </TableCell>
                 <TableCell>Actions</TableCell>

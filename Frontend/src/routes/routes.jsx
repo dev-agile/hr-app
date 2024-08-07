@@ -17,6 +17,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import Sidebar from "../scenes/global/Sidebar";
 import Topbar from "../scenes/global/Topbar";
 import Holiday from "../scenes/holiday"
+import RoleManagement from "../scenes/roles";
 
 const ProtectedRoute = ({ element }) => {
   const [theme, colorMode] = useMode();
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
   {
     path: "/holiday",
     element: <ProtectedRoute element={<Holiday />} />,
+  },
+  {
+    path: "/role",
+    element: <ProtectedRoute element={<RoleManagement />} />,
   },
 ]);
 
