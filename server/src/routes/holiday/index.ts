@@ -6,6 +6,8 @@ import {
   updateHoliday,
   deleteHoliday,
 } from "../../controller/holiday";
+import accessToken from 'src/middleware/access-token';
+import { authorizeFeature } from 'src/middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -53,7 +55,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.post('/holidays', createHoliday);
+router.post('/holidays',accessToken,authorizeFeature('holiday', ['write']), createHoliday);
 
 /**
  * @swagger
@@ -69,7 +71,7 @@ router.post('/holidays', createHoliday);
  *       500:
  *         description: Server error
  */
-router.get('/holidays', getHolidays);
+router.get('/holidays',accessToken,authorizeFeature('holiday', ['read']), getHolidays);
 
 /**
  * @swagger
@@ -94,7 +96,7 @@ router.get('/holidays', getHolidays);
  *       500:
  *         description: Server error
  */
-router.get('/holidays/:id', getHolidayById);
+router.get('/holidays/:id',accessToken,authorizeFeature('holiday', ['read']), getHolidayById);
 
 /**
  * @swagger
@@ -149,7 +151,7 @@ router.get('/holidays/:id', getHolidayById);
  *       500:
  *         description: Server error
  */
-router.put('/holidays/:id', updateHoliday);
+router.put('/holidays/:id',accessToken,authorizeFeature('holiday', ['update']) ,updateHoliday);
 
 /**
  * @swagger
@@ -174,6 +176,6 @@ router.put('/holidays/:id', updateHoliday);
  *       500:
  *         description: Server error
  */
-router.delete('/holidays/:id', deleteHoliday);
+router.delete('/holidays/:id',accessToken,authorizeFeature('holiday', ['delete']), deleteHoliday);
 
 export default router;

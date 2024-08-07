@@ -532,7 +532,6 @@ const router = Router();
  *         description: Internal server error
  */
 router.post('/approve', catchAsync(approveAttendance));
-
 router.get("/inactive", catchAsync(adminController.employees.listInactive));
 router.get("/", catchAsync(adminController.employees.list));
 router.post("/upsert", upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'documents', maxCount: 10 }]), catchAsync(adminController.employees.upsert));

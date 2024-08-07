@@ -5,7 +5,7 @@ import { status, messages } from '../constants';
 
 interface AuthRequest extends Request {
   body: {
-    _id?: string;
+    userId?: string;
     role?: string;
   };
 }
@@ -21,7 +21,7 @@ const accessToken = (req: AuthRequest, res: Response, next: NextFunction): void 
 
   try {
     const payload = verifyAccessToken(token) as { userId: string; role: string };
-    req.body._id = payload.userId; // Attach userId to the request object for further use
+    req.body.userId = payload.userId; // Attach userId to the request object for further use
     req.body.role = payload.role;
     next();
   } catch (error: any) {
