@@ -32,6 +32,14 @@ const messages = {
   attendance_approved: "Attendance changes approved",
   attendance_rejected: "Attendance changes rejected",
   no_pending_changes: "No pending changes to approve",
+  ROLE_CREATED:"Role created successfully",
+  ROLES_FETCHED:"Role fetched successfully",
+  USER_CREATED:"User created successfully",
+  USERS_FETCHED:"Users fetched successfully",
+  ROLE_NOT_FOUND:"Role not found",
+  ROLE_UPDATED:"Role updated successfully",
+  USER_NOT_FOUND:"User not found",
+
 };
 
 export default messages;
