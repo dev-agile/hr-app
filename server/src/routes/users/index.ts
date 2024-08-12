@@ -1,5 +1,7 @@
 import express from 'express';
 import { createUser, getUsers } from '../../controller/user';
+import { getConfigUser } from 'src/controller/user/getConfig';
+import { catchAsync } from '@utils';
 
 const router = express.Router();
 
@@ -61,5 +63,28 @@ router.post('/', createUser);
  *         description: Internal server error
  */
 router.get('/', getUsers);
+
+/**
+ * @swagger
+ * /api/v1/users/config:
+ *   get:
+ *     summary: Get user configuration
+ *     description: Retrieves all details of the user based on the access token.
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *       '401':
+ *         description: Unauthorized
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Server error
+ */
+router.get('/config', catchAsync(getConfigUser));
+
 
 export default router;

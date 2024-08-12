@@ -7,10 +7,13 @@ import { swaggerSpec } from '@docs';
 import { errorHandler } from '@utils';
 import router from '@routes';
 import cors from 'cors'; // Import the cors module
+import cookieParser from 'cookie-parser'; // Import cookie-parser
 
 connectDB();
 
 const app = express();
+app.use(cookieParser()); // Use cookie-parser middleware
+
 const PORT = envConfig.PORT;
 
 // Enable CORS

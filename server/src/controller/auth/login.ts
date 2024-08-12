@@ -10,7 +10,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     const user = await UsersRole.findOne({ email_address: email_address });
 
-    if ( !user) {
+    if (!user) {
       throw new CustomError(status.not_found, messages.not_found);
     }
 
@@ -25,6 +25,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     const accessToken = tokenGenerator.access(employeeId, user.role);
     const refreshToken = tokenGenerator.refresh(employeeId, user.role);
+
+    // Store the refresh token in a secure cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      sameSite: 'strict',
+    });
 
     sendResponse(res, status.ok, messages.success, {
       access_token: accessToken,
