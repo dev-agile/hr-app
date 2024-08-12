@@ -12,7 +12,7 @@ const router = Router();
  * /api/v1/menu:
  *   post:
  *     summary: Create a new menu
- *     description: Creates a new menu item with optional child menus.
+ *     description: Creates a new menu item.
  *     tags:
  *       - Menu
  *     security:
@@ -42,23 +42,15 @@ const router = Router();
  *               sortOrder:
  *                 type: number
  *                 description: The order of the menu
- *               childrens:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     name:
- *                       type: string
- *                     icon:
- *                       type: string
- *                     tooltip:
- *                       type: string
- *                     description:
- *                       type: string
- *                     url:
- *                       type: string
- *                     sortOrder:
- *                       type: number
+ *               ParentId:
+ *                 type: number
+ *                 description: The ID of the parent menu (optional)
+ *               subMenu:
+ *                 type: boolean
+ *                 description: Indicates if this menu has submenus
+ *               isMenu:
+ *                 type: boolean
+ *                 description: Indicates if this is a menu item
  *     responses:
  *       '201':
  *         description: Menu created successfully
@@ -67,6 +59,7 @@ const router = Router();
  *       '500':
  *         description: Server error
  */
+
 router.post('/', catchAsync(createMenu));
 
 /**

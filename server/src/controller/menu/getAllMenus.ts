@@ -5,7 +5,7 @@ import { status, messages } from '@constants';
 
 export const getAllMenus = async (req: Request, res: Response): Promise<void> => {
   try {
-    const menus = await Menu.find().populate('childrens');
+    const menus = await Menu.find();
 
     return sendResponse(res, status.ok, messages.success, menus);
   } catch (error) {

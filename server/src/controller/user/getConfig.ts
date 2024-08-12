@@ -6,6 +6,7 @@ import Menu from '../../model/Menu'; // Assuming you have a Menu model
 import { sendResponse } from '@utils';
 import { status, messages } from '@constants';
 import { decodeToken } from 'src/utils/jwt';
+import { buildMenuHierarchy } from 'src/utils/getUserMenuHierarchy';
 
 export const getConfigUser = async (req: Request, res: Response): Promise<void> => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -35,24 +36,24 @@ export const getConfigUser = async (req: Request, res: Response): Promise<void> 
     if (userMenu) {
       menus = await Menu.find({ menu_id: { $in: userMenu.menuIds } });
     }
-
+    const hierchuMenu=buildMenuHierarchy(menus);
     const userWithoutId = { ...user.toObject(), _id: undefined };
     const permissionsWithoutId = permissions.map((perm: any) => {
       const { _id, ...rest } = perm.toObject();
       return rest;
     });
-    const menusWithoutId = menus.map((menu: any) => {
-      const { _id, ...rest } = menu.toObject();
-      rest.childrens = rest.childrens.map((child: any) => {
-        const { _id, ...childRest } = child;
-        return childRest;
-      });
-      return rest;
-    });
+    // const menusWithoutId = hierchuMenu.map((menu: any) => {
+    //   const { _id, ...rest } = menu.toObject();
+    //   rest.childrens = rest.childrens.map((child: any) => {
+    //     const { _id, ...childRest } = child;
+    //     return childRest;
+    //   });
+    //   return rest;
+    // });
 
     const userConfig = {
       user: userWithoutId,
-      menus: menusWithoutId
+      menus: hierchuMenu
     };
     return sendResponse(res, status.ok, messages.success, userConfig);
   } catch (error) {

@@ -5,7 +5,7 @@ import { sendResponse } from '@utils';
 import { status, messages } from '@constants';
 
 export const createMenu = async (req: Request, res: Response): Promise<void> => {
-  const { name, icon, tooltip, description, url, sortOrder, childrens } = req.body;
+  const { name, icon, tooltip, description, url, sortOrder, ParentId, subMenu, isMenu } = req.body;
 
   try {
     const newMenu = new Menu({
@@ -16,10 +16,9 @@ export const createMenu = async (req: Request, res: Response): Promise<void> => 
       description,
       url,
       sortOrder,
-      childrens: childrens.map((child: any) => ({
-        menu_id: uuidv4(), // Generate a unique menu_id for each child
-        ...child
-      }))
+      ParentId, // Optional field
+      subMenu,
+      isMenu
     });
 
     await newMenu.save();
