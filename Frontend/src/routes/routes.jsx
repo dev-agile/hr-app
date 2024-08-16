@@ -18,6 +18,7 @@ import Sidebar from "../scenes/global/Sidebar";
 import Topbar from "../scenes/global/Topbar";
 import Holiday from "../scenes/holiday"
 import RoleManagement from "../scenes/roles";
+import MenuManagement from "../scenes/menuPermission"
 
 const ProtectedRoute = ({ element }) => {
   const [theme, colorMode] = useMode();
@@ -114,6 +115,10 @@ const router = createBrowserRouter([
   {
     path: "/role",
     element: <ProtectedRoute element={<RoleManagement />} />,
+  },
+  {
+    path: "/menu-permission",
+    element: <ProtectedRoute element={<MenuManagement />} />,
   },
 ]);
 
