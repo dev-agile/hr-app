@@ -6,11 +6,22 @@ import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from '@docs';
 import { errorHandler } from '@utils';
 import router from '@routes';
+import cors from 'cors'; // Import the cors module
+import cookieParser from 'cookie-parser'; // Import cookie-parser
 
 connectDB();
 
 const app = express();
+app.use(cookieParser()); // Use cookie-parser middleware
+
 const PORT = envConfig.PORT;
+
+// Enable CORS
+app.use(cors({
+  origin: 'http://localhost:5000', // Allow only this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+}));
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
