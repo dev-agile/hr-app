@@ -2,11 +2,13 @@ import { Request, Response } from 'express';
 import Role from '../../model/Role'; // Ensure the correct relative path to your Role model
 import { sendResponse } from '../../utils'; // Ensure the correct relative path to your utility functions
 import { messages, status } from '../../constants'; // Ensure the correct relative path to your constants
+import { v4 as uuidv4 } from 'uuid';
 
 export const createRole = async (req: Request, res: Response) => {
   try {
     const { name, featurePermissions } = req.body;
-    const role = new Role({ name, featurePermissions });
+    const role_id = uuidv4();
+    const role = new Role({ role_id, name, featurePermissions });
     await role.save();
     sendResponse(res, status.ok,  messages.ROLE_CREATED,role);
   } catch (error: any) {

@@ -24,6 +24,7 @@ const accessToken = async (req: AuthRequest, res: Response, next: NextFunction):
 
   try {
     const payload = verifyAccessToken(token) as { userId: string; role: string };
+    console.log('Decoded token:', payload);
     req.body.userId = payload.userId; // Attach userId to the request object for further use
     req.body.role = payload.role;
     next();

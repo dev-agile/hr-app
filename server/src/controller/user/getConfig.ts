@@ -17,7 +17,7 @@ export const getConfigUser = async (req: Request, res: Response): Promise<void> 
 
   try {
     const decoded = decodeToken(token);
-    console.log(decoded);
+    console.log("Decoded Token is",decoded);
 
     // Fetch user details and populate role
     const user = await User.findOne({ user_id: decoded.userId }).populate('role');
@@ -31,7 +31,7 @@ export const getConfigUser = async (req: Request, res: Response): Promise<void> 
     const permissions = role ? role.featurePermissions : [];
 
     // Fetch user menu based on menuIds
-    const userMenu = await UserMenu.findOne({ user_id: decoded.userId });
+    const userMenu = await UserMenu.findOne({ role_id: decoded.role.role_id });
     let menus: any[] = [];
     if (userMenu) {
       menus = await Menu.find({ menu_id: { $in: userMenu.menuIds } });

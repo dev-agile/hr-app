@@ -1,12 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 interface IUserMenu extends Document {
-  user_id: string;
+  role_id: string;
   menuIds: string[];
 }
 
 const UserMenuSchema = new Schema<IUserMenu>({
-  user_id: { type: String, required: true, unique: true },
+  role_id: { type: String, required: true, unique: true },
   menuIds: [{ type: String }]
 });
 

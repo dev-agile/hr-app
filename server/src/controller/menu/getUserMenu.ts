@@ -5,11 +5,11 @@ import { sendResponse } from '@utils';
 import { status, messages } from '@constants';
 
 export const getUserMenu = async (req: Request, res: Response): Promise<void> => {
-  const { user_id } = req.body; // Extract user_id from the request body
+  const { role_id } = req.body; // Extract role_id from the request body
 
   try {
-    // Find the UserMenu document for the given user_id
-    const userMenu = await UserMenu.findOne({ user_id });
+    // Find the UserMenu document for the given role_id
+    const userMenu = await UserMenu.findOne({ role_id });
 
     if (!userMenu) {
       return sendResponse(res, status.not_found, messages.employee_not_found, null);

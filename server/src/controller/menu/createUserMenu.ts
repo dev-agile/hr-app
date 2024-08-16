@@ -4,10 +4,10 @@ import { sendResponse } from '@utils';
 import { status, messages } from '@constants';
 
 export const createUserMenu = async (req: Request, res: Response): Promise<void> => {
-  const { user_id, menuIds } = req.body;
+  const { role_id, menuIds } = req.body;
 
   try {
-    const existingUserMenu = await UserMenu.findOne({ user_id });
+    const existingUserMenu = await UserMenu.findOne({ role_id });
 
     if (existingUserMenu) {
       // Update existing user menu
@@ -18,7 +18,7 @@ export const createUserMenu = async (req: Request, res: Response): Promise<void>
 
     // Create a new user menu
     const newUserMenu = new UserMenu({
-      user_id,
+      role_id,
       menuIds
     });
 
@@ -26,7 +26,7 @@ export const createUserMenu = async (req: Request, res: Response): Promise<void>
 
     return sendResponse(res, status.created, messages.success, newUserMenu);
   } catch (error) {
-    console.error('Error creating user menu:', error);
+    console.error('Error creating role menu:', error);
     return sendResponse(res, status.internal_server_error, messages.internal_server_error, null);
   }
 };

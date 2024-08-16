@@ -81,10 +81,10 @@ router.post('/', catchAsync(createMenu));
 router.get('/', catchAsync(getAllMenus));
 /**
  * @swagger
- * /api/v1/menu/user-menu:
+ * /api/v1/menu/role-menu:
  *   post:
- *     summary: Create or update a user menu
- *     description: Creates or updates a user menu with associated menu IDs.
+ *     summary: Create or update a role menu
+ *     description: Creates or updates a role menu with associated menu IDs.
  *     tags:
  *       - UserMenu
  *     security:
@@ -96,9 +96,9 @@ router.get('/', catchAsync(getAllMenus));
  *           schema:
  *             type: object
  *             properties:
- *               user_id:
+ *               role_id:
  *                 type: string
- *                 description: The unique identifier for the user
+ *                 description: The unique identifier for the role
  *               menuIds:
  *                 type: array
  *                 items:
@@ -106,21 +106,21 @@ router.get('/', catchAsync(getAllMenus));
  *                 description: Array of menu IDs associated with the user
  *     responses:
  *       '201':
- *         description: User menu created successfully
+ *         description: Role menu created successfully
  *       '200':
- *         description: User menu updated successfully
+ *         description: Role menu updated successfully
  *       '400':
  *         description: Validation error
  *       '500':
  *         description: Server error
  */
-router.post('/user-menu', catchAsync(createUserMenu));
+router.post('/role-menu', catchAsync(createUserMenu));
 /**
  * @swagger
- * /api/v1/menu/getUserMenu:
+ * /api/v1/menu/getRoleMenu:
  *   post:
- *     summary: Get user menu
- *     description: Retrieves the menu IDs associated with a user.
+ *     summary: Get role menu
+ *     description: Retrieves the menu IDs associated with a role.
  *     tags:
  *       - UserMenu
  *     security:
@@ -132,17 +132,17 @@ router.post('/user-menu', catchAsync(createUserMenu));
  *           schema:
  *             type: object
  *             properties:
- *               user_id:
+ *               role_id:
  *                 type: string
- *                 description: The unique identifier for the user
+ *                 description: The unique identifier for the role
  *     responses:
  *       '200':
  *         description: Successful operation
  *       '404':
- *         description: User menu not found
+ *         description: Role menu not found
  *       '500':
  *         description: Server error
  */
-router.post('/getUserMenu', catchAsync(getUserMenu));
+router.post('/getRoleMenu', catchAsync(getUserMenu));
 
 export default router;
