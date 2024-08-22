@@ -1,6 +1,8 @@
 import express from 'express';
 import { createEmployeeLeaves } from 'src/controller/leaves/createEmployeeLeaves';
 import { createLeave } from 'src/controller/leaves/createLeave';
+import { getAllLeaves } from 'src/controller/leaves/getAllLeaves';
+import { getAllEmployeeLeaves, getEmployeeLeaves } from 'src/controller/leaves/getleaves';
 
 const router = express.Router();
 
@@ -125,5 +127,106 @@ router.post('/', createEmployeeLeaves);
  *         description: Internal server error
  */
 router.post('/leaveApply', createLeave);
+/**
+ * @swagger
+ * /api/v1/leaves/{user_id}:
+ *   get:
+ *     summary: Get employee leaves
+ *     tags:
+ *       - Leaves
+ *     description: Retrieve leaves for a specific employee
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         description: ID of the employee
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 data:
+ *                   $ref: '#/components/schemas/EmployeeLeaves'
+ *       '400':
+ *         description: Bad request
+ *       '404':
+ *         description: Employee not found
+ *       '500':
+ *         description: Internal server error
+ */
+router.get('/:user_id', getEmployeeLeaves);
+
+/**
+ * @swagger
+ * /api/v1/leaves:
+ *   get:
+ *     summary: Get all employee leaves
+ *     tags:
+ *       - Leaves
+ *     description: Retrieve leaves for all employees
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/EmployeeLeaves'
+ *       '500':
+ *         description: Internal server error
+ */
+router.get('/', getAllEmployeeLeaves);
+/**
+ * @swagger
+ * /api/v1/leaves/all/employees:
+ *   get:
+ *     summary: Get all leaves
+ *     tags:
+ *       - Leaves
+ *     description: Retrieve all leave requests across all employees
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Leave'
+ *       '500':
+ *         description: Internal server error
+ */
+router.get('/all/employees', getAllLeaves);
+
 
 export default router;
