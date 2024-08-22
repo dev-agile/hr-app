@@ -4,6 +4,7 @@ import { catchAsync } from '@utils';
 import upload from '../../middleware/multer-config'; // Update this path as necessary
 import { createDayType } from 'src/controller/employees/addDaytpe';
 import { approveAttendance, deleteEmployee } from 'src/controller/admin/employees';
+import { approveLeave } from 'src/controller/admin/employees/approveLeave';
 
 const router = Router();
 
@@ -531,6 +532,45 @@ const router = Router();
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/v1/admin/employees/{leave_id}/leaveApprove:
+ *   put:
+ *     summary: Approve a leave request
+ *     tags:
+ *       - Admin
+ *     description: Approves a pending leave request
+ *     parameters:
+ *       - in: path
+ *         name: leave_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the leave request to approve
+ *     responses:
+ *       '200':
+ *         description: Leave request approved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Leave request approved successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/Leave'
+ *       '400':
+ *         description: Bad request
+ *       '404':
+ *         description: Leave request not found
+ *       '500':
+ *         description: Internal server error
+ */
+router.put('/:leave_id/leaveApprove', approveLeave);
 router.post('/approve', catchAsync(approveAttendance));
 router.get("/inactive", catchAsync(adminController.employees.listInactive));
 router.get("/", catchAsync(adminController.employees.list));
