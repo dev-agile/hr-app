@@ -19,6 +19,7 @@ import Topbar from "../scenes/global/Topbar";
 import Holiday from "../scenes/holiday"
 import RoleManagement from "../scenes/roles";
 import MenuManagement from "../scenes/menuPermission"
+import LeaveMangament from "../scenes/Leave"
 
 const ProtectedRoute = ({ element }) => {
   const [theme, colorMode] = useMode();
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
   {
     path: "/menu-permission",
     element: <ProtectedRoute element={<MenuManagement />} />,
+  },
+  {
+    path: "/leave",
+    element: <ProtectedRoute element={<LeaveMangament />} />,
   },
 ]);
 

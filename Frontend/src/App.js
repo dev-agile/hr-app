@@ -18,6 +18,7 @@ import Calendar from './scenes/calendar/calendar';
 import Holiday from './scenes/holiday';
 import Role from './scenes/roles';
 import MenuPermission from "./scenes/menuPermission"
+import Leave from "./scenes/Leave"
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ColorModeContext, useMode } from './theme';
 
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/holiday" element={<Holiday />} />
                 <Route path="/role" element={<Role />} />
                 <Route path="/menu-permission" element={<MenuPermission />} />
+                <Route path="/leave" element={<Leave />} />
               </Routes>
             </main>
           </div>
