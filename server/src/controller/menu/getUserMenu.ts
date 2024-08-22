@@ -26,7 +26,6 @@ export const getUserMenu = async (req: Request, res: Response): Promise<void> =>
       menu.children = []; // Initialize children array for each menu item
       menuMap.set(menu.menu_id, menu);
     });
-    console.log("menuMap",menuMap)
 
     // Array to hold the top-level menu items
     const rootMenus:any = [];

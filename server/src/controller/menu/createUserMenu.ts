@@ -11,7 +11,7 @@ export const createUserMenu = async (req: Request, res: Response): Promise<void>
 
     if (existingUserMenu) {
       // Update existing user menu
-      existingUserMenu.menuIds = Array.from(new Set([...existingUserMenu.menuIds, ...menuIds]));
+      existingUserMenu.menuIds = Array.from(new Set([ ...menuIds]));
       await existingUserMenu.save();
       return sendResponse(res, status.ok, messages.success, existingUserMenu);
     }

@@ -10,7 +10,9 @@ const useMenuStore = create((set) => ({
     try {
       const response = await axiosInstance.get('/menu');
       const data = response.data.data;
+   
       set({ menus: data, loading: false });
+      
     } catch (error) {
       console.error('Error fetching menus:', error);
       set({ loading: false });

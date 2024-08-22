@@ -193,6 +193,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
+              title="Leave"
+              to="/leave"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
               title="Calendar"
               to="/calendar"
               icon={<CalendarTodayOutlinedIcon />}

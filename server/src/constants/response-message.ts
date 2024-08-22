@@ -32,14 +32,35 @@ const messages = {
   attendance_approved: "Attendance changes approved",
   attendance_rejected: "Attendance changes rejected",
   no_pending_changes: "No pending changes to approve",
-  ROLE_CREATED:"Role created successfully",
-  ROLES_FETCHED:"Role fetched successfully",
-  USER_CREATED:"User created successfully",
-  USERS_FETCHED:"Users fetched successfully",
-  ROLE_NOT_FOUND:"Role not found",
-  ROLE_UPDATED:"Role updated successfully",
-  USER_NOT_FOUND:"User not found",
-
+  ROLE_CREATED: "Role created successfully",
+  ROLES_FETCHED: "Roles fetched successfully",
+  USER_CREATED: "User created successfully",
+  USERS_FETCHED: "Users fetched successfully",
+  ROLE_NOT_FOUND: "Role not found",
+  ROLE_UPDATED: "Role updated successfully",
+  USER_NOT_FOUND: "User not found",
+  already_exists: "Resource already exists",
+  
+  // Messages for Leaves
+  leave_created: "Leave request created successfully",
+  leave_updated: "Leave request updated successfully",
+  leave_deleted: "Leave request deleted successfully",
+  leave_not_found: "Leave request not found",
+  leave_already_exists: "Leave request already exists for this date",
+  leave_approved: "Leave request approved successfully",
+  leave_rejected: "Leave request rejected successfully",
+  leave_already_processed: "Leave request has already been processed",
+  invalid_leave_type: "Invalid leave type",
+  invalid_leave_duration: "Invalid leave duration",
+  insufficient_leave_balance: "Insufficient leave balance",
+  
+  // Messages for EmployeeLeaves
+  employee_leaves_created: "Employee leaves record created successfully",
+  employee_leaves_updated: "Employee leaves record updated successfully",
+  employee_leaves_deleted: "Employee leaves record deleted successfully",
+  employee_leaves_not_found: "Employee leaves record not found",
+  employee_leaves_already_exists: "Employee leaves record already exists",
+  invalid_holidays_pending: "Invalid holidays pending value",
 };
 
 export default messages;
