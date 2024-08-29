@@ -46,7 +46,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        `${API_CONFIG.BASE_URL}api/v1/auth/login`,
+        `${API_CONFIG.BASE_URL}/auth/login`,
         payload,
         {
           headers: {

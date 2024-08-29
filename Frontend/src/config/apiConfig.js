@@ -1,3 +1,3 @@
 export const API_CONFIG = {
-  BASE_URL: "http://localhost:3003/",
+  BASE_URL: process.env.REACT_APP_BASE_URL,
 };
