@@ -16,11 +16,21 @@ app.use(cookieParser()); // Use cookie-parser middleware
 
 const PORT = envConfig.PORT;
 
-// Enable CORS
+// Enable CORS for multiple environments
+const allowedOrigins = ['http://localhost:5000', 'https://hr-app-2j6d.vercel.app'];
 app.use(cors({
-  origin: 'http://localhost:5000', // Allow only this origin
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+  credentials: true // Allow credentials
 }));
 
 // Middleware to parse JSON bodies
