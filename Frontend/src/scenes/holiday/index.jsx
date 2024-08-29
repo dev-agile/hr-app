@@ -201,8 +201,24 @@ const Holiday = () => {
         </TableContainer>
       )}
 
-      <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>{isEditMode ? "Edit Holiday" : "Add Holiday"}</DialogTitle>
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: colors.primary[400],
+            color: colors.grey[100],
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            backgroundColor: colors.blueAccent[700],
+            color: colors.grey[100],
+          }}
+        >
+          {isEditMode ? "Edit Holiday" : "Add Holiday"}
+        </DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
@@ -210,6 +226,14 @@ const Holiday = () => {
             fullWidth
             value={currentHoliday.name || ""}
             onChange={(e) => setCurrentHoliday({ ...currentHoliday, name: e.target.value })}
+            sx={{
+              "& .MuiInputBase-root": {
+                color: colors.grey[100],
+              },
+              "& .MuiInputLabel-root": {
+                color: colors.grey[100],
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -219,6 +243,14 @@ const Holiday = () => {
             InputLabelProps={{ shrink: true }}
             value={currentHoliday.date || ""}
             onChange={(e) => setCurrentHoliday({ ...currentHoliday, date: e.target.value })}
+            sx={{
+              "& .MuiInputBase-root": {
+                color: colors.grey[100],
+              },
+              "& .MuiInputLabel-root": {
+                color: colors.grey[100],
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -226,12 +258,34 @@ const Holiday = () => {
             fullWidth
             value={currentHoliday.description || ""}
             onChange={(e) => setCurrentHoliday({ ...currentHoliday, description: e.target.value })}
+            sx={{
+              "& .MuiInputBase-root": {
+                color: colors.grey[100],
+              },
+              "& .MuiInputLabel-root": {
+                color: colors.grey[100],
+              },
+            }}
           />
           <FormControl fullWidth margin="dense">
-            <InputLabel>Type</InputLabel>
+            <InputLabel sx={{ color: colors.grey[100] }}>Type</InputLabel>
             <Select
               value={currentHoliday.type || ""}
               onChange={(e) => setCurrentHoliday({ ...currentHoliday, type: e.target.value })}
+              sx={{
+                "& .MuiSelect-select": {
+                  color: colors.grey[100],
+                },
+                "& .MuiPaper-root": {
+                  backgroundColor: colors.primary[400],
+                },
+                "& .MuiMenuItem-root": {
+                  backgroundColor: colors.primary[400],
+                  "&:hover": {
+                    backgroundColor: colors.blueAccent[700],
+                  },
+                },
+              }}
             >
               <MenuItem value="Public">Public</MenuItem>
               <MenuItem value="Company">Company</MenuItem>
