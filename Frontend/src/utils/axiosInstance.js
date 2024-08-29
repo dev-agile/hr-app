@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3003/api/v1', // Your API base URL
+  baseURL: process.env.REACT_APP_BASE_URL, // Use the environment variable for the base URL
 });
 
 // Add a request interceptor to include the refresh_token in the headers
