@@ -21,10 +21,12 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  useTheme
 } from "@mui/material";
 import { Add, Edit, Delete, Search } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import useHolidayStore from "../../store/holidayStore"; // Import the Zustand store
+import { tokens } from "../../theme";
 
 const Holiday = () => {
   const { holidays, fetchHolidays, addHoliday, updateHoliday, deleteHoliday, loading } = useHolidayStore();
@@ -33,6 +35,8 @@ const Holiday = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
     fetchHolidays();
@@ -117,7 +121,17 @@ const Holiday = () => {
         Holiday Management
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={2}>
-        <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAddClick}>
+        <Button
+          sx={{
+            backgroundColor: colors.blueAccent[700],
+            color: colors.grey[100],
+            fontSize: "14px",
+            fontWeight: "bold",
+            padding: "10px 20px",
+          }}
+          startIcon={<Add />}
+          onClick={handleAddClick}
+        >
           Add Holiday
         </Button>
         <TextField
@@ -135,7 +149,18 @@ const Holiday = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer
+          sx={{
+            backgroundColor: colors.primary[400],
+            "& .MuiTableCell-root": {
+              borderBottom: "none",
+            },
+            "& .MuiTableHead-root": {
+              backgroundColor: colors.blueAccent[700],
+            },
+          }}
+          component={Paper}
+        >
           <Table>
             <TableHead>
               <TableRow>
