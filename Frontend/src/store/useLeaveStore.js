@@ -4,6 +4,7 @@ import axiosInstance from '../utils/axiosInstance';
 const useLeaveStore = create((set) => ({
   leaves: [],
   loading: false,
+  
   fetchLeaves: async () => {
     set({ loading: true });
     try {
@@ -14,6 +15,7 @@ const useLeaveStore = create((set) => ({
       set({ loading: false });
     }
   },
+  
   addLeave: async (leave) => {
     set({ loading: true });
     try {
@@ -28,6 +30,7 @@ const useLeaveStore = create((set) => ({
       set({ loading: false });
     }
   },
+  
   updateLeave: async (leave) => {
     set({ loading: true });
     try {
@@ -41,6 +44,7 @@ const useLeaveStore = create((set) => ({
       set({ loading: false });
     }
   },
+  
   deleteLeave: async (leaveId) => {
     set({ loading: true });
     try {
@@ -51,6 +55,23 @@ const useLeaveStore = create((set) => ({
       }));
     } catch (error) {
       console.error('Error deleting leave:', error);
+      set({ loading: false });
+    }
+  },
+
+  processLeave: async (leaveId, action) => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.put('/admin/employees/leaves/process', { leave_id: leaveId, action });
+      set((state) => ({
+        leaves: state.leaves.map((l) => 
+          l._id === leaveId ? { ...l, status: action } : l
+        ),
+        loading: false,
+      }));
+      console.log('Leave processed:', response.data);
+    } catch (error) {
+      console.error('Error processing leave:', error);
       set({ loading: false });
     }
   },
