@@ -29,6 +29,7 @@ export const getAllLeaves = async (req: Request, res: Response) => {
           // Project the fields you want in the output
           _id: 1,
           leaveDate: 1,
+          leave_id:1,
           duration: 1,
           status: 1,
           description: 1,

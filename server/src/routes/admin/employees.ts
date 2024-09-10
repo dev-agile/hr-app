@@ -4,7 +4,7 @@ import { catchAsync } from '@utils';
 import upload from '../../middleware/multer-config'; // Update this path as necessary
 import { createDayType } from 'src/controller/employees/addDaytpe';
 import { approveAttendance, deleteEmployee } from 'src/controller/admin/employees';
-import { approveLeave } from 'src/controller/admin/employees/approveLeave';
+import { processLeave } from 'src/controller/admin/employees/approveLeave';
 
 const router = Router();
 
@@ -534,22 +534,29 @@ const router = Router();
  */
 /**
  * @swagger
- * /api/v1/admin/employees/{leave_id}/leaveApprove:
+ * /api/v1/admin/employees/leaves/process:
  *   put:
- *     summary: Approve a leave request
+ *     summary: Process a leave request
  *     tags:
  *       - Admin
- *     description: Approves a pending leave request
- *     parameters:
- *       - in: path
- *         name: leave_id
- *         required: true
- *         schema:
- *           type: string
- *         description: The unique ID of the leave request to approve
+ *     description: Approves or rejects a pending leave request
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               leave_id:
+ *                 type: string
+ *                 description: The unique ID of the leave request to process
+ *               action:
+ *                 type: string
+ *                 enum: [Accepted, Rejected]
+ *                 description: Action to take on the leave request
  *     responses:
  *       '200':
- *         description: Leave request approved successfully
+ *         description: Leave request processed successfully
  *         content:
  *           application/json:
  *             schema:
@@ -560,7 +567,7 @@ const router = Router();
  *                   example: 200
  *                 message:
  *                   type: string
- *                   example: Leave request approved successfully
+ *                   example: Leave request processed successfully
  *                 data:
  *                   $ref: '#/components/schemas/Leave'
  *       '400':
@@ -570,7 +577,7 @@ const router = Router();
  *       '500':
  *         description: Internal server error
  */
-router.put('/:leave_id/leaveApprove', approveLeave);
+router.put('/leaves/process', processLeave);
 router.post('/approve', catchAsync(approveAttendance));
 router.get("/inactive", catchAsync(adminController.employees.listInactive));
 router.get("/", catchAsync(adminController.employees.list));
