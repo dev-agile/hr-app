@@ -16,11 +16,12 @@ const validationSchema = yup.object({
   ),
 });
 
-const initialValues = {
-  documents: ["", ""],
-};
 
-const Documents = () => {
+const Documents = ({user1}) => {
+  const { employee } = user1 || {};
+  const initialValues = {
+    documents: employee?.documents || ["", ""],
+  };
   const handleSubmit = (values) => {
     console.log("Submitted values:", values.documents);
   };

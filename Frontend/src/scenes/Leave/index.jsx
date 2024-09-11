@@ -1,17 +1,21 @@
-import React, { useEffect,useState } from "react";
-import { Box, TextField, Typography, useTheme, Badge, Menu, MenuItem, CircularProgress } from "@mui/material";
+import React, { useEffect, useState, useContext } from "react";
+import { Box, TextField, Typography, Menu, MenuItem, CircularProgress, Chip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
+import { useTheme } from "@mui/material/styles";
+import { tokens, ColorModeContext } from "../../theme";
 import Header from "../../components/Header";
 import useLeaveStore from "../../store/useLeaveStore";
+import { toast } from 'react-toastify'; // Import toast from react-toastify
 
 const Leave = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { leaves, loading, fetchLeaves } = useLeaveStore();
+  const { toggleColorMode } = useContext(ColorModeContext);
+  const { leaves, loading, fetchLeaves, processLeave } = useLeaveStore();
 
   useEffect(() => {
-    fetchLeaves(); // Fetch leaves on component mount
+    fetchLeaves();
+    toast.info('Testing toast notification'); // Fetch leaves on component mount
   }, [fetchLeaves]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,9 +44,14 @@ const Leave = () => {
     setSelectedRow(null);
   };
 
-  const handleStatusChange = (newStatus) => {
-    if (selectedRow) {
-      selectedRow.status = newStatus;
+  const handleStatusChange = async (newStatus) => {
+    try {
+      if (selectedRow) {
+        await processLeave(selectedRow.leave_id, newStatus);
+        toast.success(`Leave ${newStatus.toLowerCase()} successfully`);
+      }
+    } catch (error) {
+      toast.error("Error processing leave request");
     }
     handleMenuClose();
   };
@@ -55,11 +64,21 @@ const Leave = () => {
       headerName: "Status", 
       flex: 1,
       renderCell: (params) => (
-        <Badge 
-          badgeContent={params.value} 
-          color={params.value === "Pending" ? "warning" : "success"}
+        <Chip
+          label={params.value}
           onClick={(event) => handleMenuOpen(event, params.row)}
-          sx={{ cursor: 'pointer', marginLeft: 5 }}
+          sx={{ 
+            cursor: 'pointer', 
+            backgroundColor: params.value === "Pending" ? colors.orangeAccent[400] : colors.greenAccent[400],
+            color: theme.palette.getContrastText(params.value === "Pending" ? colors.orangeAccent[400] : colors.greenAccent[400]),
+            padding: '4px 8px',
+            fontSize: '0.85rem',
+            fontWeight: 'bold',
+            borderRadius: '4px',
+            "&:hover": {
+              backgroundColor: params.value === "Pending" ? colors.orangeAccent[500] : colors.greenAccent[500],
+            },
+          }}
         />
       )
     },
@@ -80,7 +99,7 @@ const Leave = () => {
   return (
     <Box m="20px">
       <Header title="LEAVE" subtitle="List of Leave Requests" />
-      <Box mb="20px">
+      <Box mb="20px" display="flex" alignItems="center">
         <TextField
           label="Search"
           variant="outlined"

@@ -4,7 +4,16 @@ import React from "react";
 import { addQualificationValidationSchema } from "../../../utils/schema";
 import { addQualificationsInitialValues } from "../../../utils/formInitialValues";
 
-const AddQualifications = () => {
+const AddQualifications = ({user1}) => {
+  const { user, employee } = user1 || {};
+  const initialValues = {
+    ...addQualificationsInitialValues,
+    educationalBackground: employee?.educational_background || [],
+    certifications: employee?.certifications || [],
+    skills: employee?.skills || [],
+    languages_spoken: employee?.languages_spoken || [],
+    work_experience: employee?.work_experience || [],
+  };
   const handleSubmit = (values) => {
     console.log("Submitted values:", values);
   };
@@ -15,7 +24,7 @@ const AddQualifications = () => {
         Educational Background
       </Typography>
       <Formik
-        initialValues={addQualificationsInitialValues}
+        initialValues={initialValues}
         validationSchema={addQualificationValidationSchema}
         onSubmit={handleSubmit}
       >

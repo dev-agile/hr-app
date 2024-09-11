@@ -60,6 +60,17 @@ export const tokens = (mode) => ({
           800: "#2a2d64",
           900: "#151632",
         },
+        orangeAccent: {
+          100: "#fbe9e7",
+          200: "#ffccbc",
+          300: "#ffab91",
+          400: "#ff8a65",
+          500: "#ff7043",  // Primary orange accent
+          600: "#f4511e",
+          700: "#e64a19",
+          800: "#d84315",
+          900: "#bf360c",
+        },
       }
     : {
         grey: {
@@ -116,6 +127,17 @@ export const tokens = (mode) => ({
           700: "#a4a9fc",
           800: "#c3c6fd",
           900: "#e1e2fe",
+        },
+        orangeAccent: {
+          100: "#fff3e0",
+          200: "#ffe0b2",
+          300: "#ffcc80",
+          400: "#ffb74d",
+          500: "#ffa726",  // Primary orange accent
+          600: "#ff9800",
+          700: "#fb8c00",
+          800: "#f57c00",
+          900: "#ef6c00",
         },
       }),
 });

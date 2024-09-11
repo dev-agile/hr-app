@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { AppBar, Box, Button, Container, Paper, Toolbar, Typography } from '@mui/material';
 import { Oval } from 'react-loader-spinner';
+import { useTheme } from '@mui/material/styles';
 import useRoleStore from '../../store/roleStore';
 import useMenuStore from '../../store/menuStore';
 import MenuItem from './MenuItem';
 
 const RoleDropdown = () => {
+  const theme = useTheme();
   const { roles, fetchRoles, loading: roleLoading, error: roleError } = useRoleStore();
   const { menus, fetchUserMenus, loading: menuLoading, error: menuError, fetchMenus, createUserMenu } = useMenuStore();
 
@@ -72,18 +74,18 @@ const RoleDropdown = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.main }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: theme.palette.common.white }}>
             Role Management
           </Typography>
         </Toolbar>
       </AppBar>
       <Container maxWidth="md">
-        <Paper elevation={3} sx={{ padding: '30px', marginTop: '30px', borderRadius: '12px' }}>
+        <Paper elevation={3} sx={{ padding: '30px', marginTop: '30px', borderRadius: '12px', backgroundColor: theme.palette.background.paper }}>
           {(roleLoading || menuLoading) && (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
-              <Oval color="#00BFFF" height={80} width={80} />
+              <Oval color={theme.palette.primary.main} height={80} width={80} />
             </Box>
           )}
           {!roleLoading && !menuLoading && (
@@ -96,8 +98,26 @@ const RoleDropdown = () => {
                   isClearable
                   isSearchable
                   styles={{
-                    control: (provided) => ({ ...provided, margin: '0 auto', borderColor: 'lightgray', borderRadius: '8px', minHeight: '48px', fontSize: '16px' }),
-                    menu: (provided) => ({ ...provided, margin: '0 auto' })
+                    control: (provided) => ({
+                      ...provided,
+                      margin: '0 auto',
+                      borderColor: theme.palette.divider,
+                      borderRadius: '8px',
+                      minHeight: '48px',
+                      fontSize: '16px',
+                      backgroundColor: theme.palette.background.default,
+                      color: theme.palette.text.primary,
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      margin: '0 auto',
+                      backgroundColor: theme.palette.background.paper,
+                      color: theme.palette.text.primary,
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      color: theme.palette.text.primary,
+                    }),
                   }}
                   menuPortalTarget={document.body}
                   onChange={handleRoleChange}
@@ -119,7 +139,25 @@ const RoleDropdown = () => {
                 </Box>
               )}
 
-              <Button onClick={handleSubmit} variant="contained" color="primary" sx={{ marginTop: '30px', width: '100%', padding: '12px', fontSize: '16px' }}>Update</Button>
+              <Button
+                onClick={handleSubmit}
+                variant="contained"
+                color="primary"
+                sx={{
+                  marginTop: '30px',
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '16px',
+                  borderRadius: '8px',
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.common.white,
+                  '&:hover': {
+                    backgroundColor: theme.palette.primary.dark,
+                  },
+                }}
+              >
+                Update
+              </Button>
             </>
           )}
         </Paper>

@@ -61,6 +61,7 @@ const messages = {
   employee_leaves_not_found: "Employee leaves record not found",
   employee_leaves_already_exists: "Employee leaves record already exists",
   invalid_holidays_pending: "Invalid holidays pending value",
+  USER_FETCHED:"User fetched successfully",
 };
 
 export default messages;
