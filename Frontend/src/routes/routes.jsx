@@ -20,6 +20,7 @@ import Holiday from "../scenes/holiday"
 import RoleManagement from "../scenes/roles";
 import MenuManagement from "../scenes/menuPermission"
 import LeaveMangament from "../scenes/Leave"
+import EditTeam from "../scenes/editTeam"
 
 const ProtectedRoute = ({ element }) => {
   const [theme, colorMode] = useMode();
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
     children: [
       { path: "addTeam", element: <ProtectedRoute element={<AddTeam />} /> },
       { path: "viewTeam", element: <ProtectedRoute element={<Form />} /> },
+      { path: "editTeam", element: <ProtectedRoute element={<EditTeam />} /> },
     ],
   },
   {

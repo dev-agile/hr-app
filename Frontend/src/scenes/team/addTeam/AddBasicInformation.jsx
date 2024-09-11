@@ -8,7 +8,8 @@ import EmergencyContact from "./components/EmergencyContact";
 import CurrentAddress from "./components/CurrentAddress";
 import ContactInformation from "./components/ContactInformation";
 
-const AddBasicInformation = () => {
+const AddBasicInformation = ({user1}) => {
+  const { user, employee } = user1 || {};
   const [avatarURL, setAvatarURL] = React.useState("");
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const fileUploadRef = React.useRef();
@@ -39,12 +40,41 @@ const AddBasicInformation = () => {
       setAvatarURL("");
     }
   };
+  const initialValues = {
+    ...basicInfoInitialValues,
+    first_name: employee?.first_name || "",
+    last_name: employee?.last_name || "",
+    email_address: user?.email_address || "",
+    father_name: employee?.father_name || "",
+    mother_name: employee?.mother_name || "",
+    date_of_birth: employee?.date_of_birth ? new Date(employee.date_of_birth).toISOString().split('T')[0] : "",
+    gender: employee?.gender || "",
+    marital_status: employee?.marital_status || "",
+    nationality: employee?.nationality || "",
+    designation: employee?.designation || "",
+    joining_date: employee?.joining_date ? new Date(employee.joining_date).toISOString().split('T')[0] : "",
+    ending_date: employee?.ending_date ? new Date(employee.ending_date).toISOString().split('T')[0] : "",
+    phone_number: employee?.contact_information?.phone_number || "",
+    emergency_contact: {
+      name: employee?.contact_information?.emergency_contact?.name || "",
+      relationship: employee?.contact_information?.emergency_contact?.relationship || "",
+      phone_number: employee?.contact_information?.emergency_contact?.phone_number || "",
+    },
+    current_address: {
+      street: employee?.contact_information?.address?.current?.street || "",
+      city: employee?.contact_information?.address?.current?.city || "",
+      state: employee?.contact_information?.address?.current?.state || "",
+      zip_code: employee?.contact_information?.address?.current?.zip_code || "",
+      country: employee?.contact_information?.address?.current?.country || "",
+    },
+  };
+  console.log("AddBasicInformation",user);
 
   return (
     <Box m="20px">
       <Formik
         onSubmit={handleFormSubmit}
-        initialValues={basicInfoInitialValues}
+        initialValues={initialValues}
         validationSchema={basicInfoSchema}
       >
         {({

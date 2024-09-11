@@ -10,7 +10,20 @@ const useUserStore = create((set) => ({
     set({ loading: true });
     try {
       const response = await axiosInstance.get('/users');
-      set({ users: response.data.data, loading: false });
+      console.log("Response is",response);
+      set({ users: response.data.message, loading: false });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      set({ loading: false });
+    }
+  },
+  getUser: async (user) => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.get(`/users/${user}`);
+      console.log("Response is",response);
+      set({currentUser:response.data.message})
+      set({ users: response.data.message, loading: false });
     } catch (error) {
       console.error('Error fetching users:', error);
       set({ loading: false });

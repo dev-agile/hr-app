@@ -11,28 +11,51 @@ import React from "react";
 import AddBasicInformation from "./AddBasicInformation";
 import AddQualifications from "./AddQualifications";
 import Documents from "./Documents";
-
+import useUserStore from "../../../store/userStore";
+import { useLocation } from 'react-router-dom';
 const steps = [
   "Add Basic Information",
   "Add Education Information",
   "Add Documents",
 ];
 
-const InformationScreen = ({ activeStep }) => {
-  switch (activeStep) {
-    case 0:
-      return <AddBasicInformation />;
-    case 1:
-      return <AddQualifications />;
-    case 2:
-      return <Documents />;
-    default:
-      return <div>Invalid step: {activeStep}</div>;
-  }
-};
 
 const AddTeam = () => {
   const [activeStep, setActiveStep] = React.useState(0);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userId = searchParams.get('user_id');
+  const getUser = useUserStore((state) => state.getUser);
+  const currentUser = useUserStore((state)=>state.currentUser);
+  console.log("Current user: " + JSON.stringify(currentUser));
+  React.useEffect(() => {
+    if (userId) {
+      // Fetch user data using the userId
+      console.log("Editing user with ID:", userId);
+      const getUserData=async()=>
+      {
+        const response=await getUser(userId);
+        console.log("User data:", response);
+      }
+      getUserData();
+     
+      // You can call a function here to fetch the user data
+      // and set it in the component state
+    }
+  }, [userId]);
+  const InformationScreen = ({ activeStep }) => {
+    switch (activeStep) {
+      case 0:
+        return <AddBasicInformation user1={currentUser} />;
+      case 1:
+        return <AddQualifications user1={currentUser} />;
+      case 2:
+        return <Documents user1={currentUser} />;
+      default:
+        return <div>Invalid step: {activeStep}</div>;
+    }
+  };
+  
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
