@@ -2,6 +2,7 @@ import express from 'express';
 import { createUser, getUsers } from '../../controller/user';
 import { getConfigUser } from 'src/controller/user/getConfig';
 import { catchAsync } from '@utils';
+import { getUserById } from 'src/controller/user/getUserById';
 
 const router = express.Router();
 
@@ -63,6 +64,34 @@ router.post('/', createUser);
  *         description: Internal server error
  */
 router.get('/', getUsers);
+/**
+ * @swagger
+ * /api/v1/users/{user_id}:
+ *   get:
+ *     summary: Get a user by user_id
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user_id of the user to retrieve
+ *     responses:
+ *       200:
+ *         description: User fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/:user_id', getUserById);
 
 /**
  * @swagger
